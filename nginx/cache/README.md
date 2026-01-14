@@ -2,27 +2,20 @@ In this setup nginx works as a local cache server for a remote web server.
 
 # Server information:
 
-laud@contentcache:~$ neofetch
-            .-/+oossssoo+/-.               laud@contentcache.laud-media.com
-        `:+ssssssssssssssssss+:`           --------------------------------
-      -+ssssssssssssssssssyyssss+-         OS: Ubuntu 24.04.3 LTS x86_64
-    .ossssssssssssssssssdMMMNysssso.       Host: OptiPlex 7040
-   /ssssssssssshdmmNNmmyNMMMMhssssss/      Kernel: 6.8.0-90-generic
-  +ssssssssshmydMMMMMMMNddddyssssssss+     Uptime: 1 hour, 4 mins
- /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/    Packages: 797 (dpkg)
-.ssssssssdMMMNhsssssssssshNMMMdssssssss.   Shell: bash 5.2.21
-+sssshhhyNMMNyssssssssssssyNMMMysssssss+   Resolution: 640x480
-ossyNMMMNyMMhsssssssssssssshmmmhssssssso   Terminal: /dev/pts/1
-ossyNMMMNyMMhsssssssssssssshmmmhssssssso   CPU: Intel i3-6100 (4) @ 3.700GHz
-+sssshhhyNMMNyssssssssssssyNMMMysssssss+   GPU: NVIDIA GeForce GTX 1050 Ti
-.ssssssssdMMMNhsssssssssshNMMMdssssssss.   Memory: 323MiB / 7846MiB
- /sssssssshNMMMyhhyyyyhdNMMMNhssssssss/
-  +sssssssssdmydMMMMMMMMddddyssssssss+
-   /ssssssssssshdmNNNNmyNMMMMhssssss/
-    .ossssssssssssssssssdMMMNysssso.
-      -+sssssssssssssssssyyyssss+-
-        `:+ssssssssssssssssss+:`
-            .-/+oossssoo+/-.
+user@contentcache:~$ neofetch
+System information
+--------------------------------
+OS: Ubuntu 24.04.3 LTS x86_64
+Host: OptiPlex 7040
+Kernel: 6.8.0-90-generic
+Uptime: 1 hour, 4 mins
+Packages: 797 (dpkg)
+Shell: bash 5.2.21
+Resolution: 640x480
+Terminal: /dev/pts/1
+CPU: Intel i3-6100 (4) @ 3.700GHz
+GPU: NVIDIA GeForce GTX 1050 Ti
+Memory: 323MiB / 7846MiB
 
 # Nginx information:
 
