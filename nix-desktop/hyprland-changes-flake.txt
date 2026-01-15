@@ -1,0 +1,41 @@
+{
+  description = "Flake config for alr";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Corrected spelling to 'hyprland'
+    hyprland.url = "github:hyprwm/Hyprland";
+  };
+
+  outputs = { self, nixpkgs, home-manager, hyprland, ... } @ inputs: 
+  let
+    system = "x86_64-linux";
+  in {
+    # 1. NixOS system config (sudo nixos-rebuild switch --flake .#alr-work)
+    nixosConfigurations.alr-work = nixpkgs.lib.nixosSystem {
+      inherit system;
+      # This passes 'inputs' to configuration.nix
+      specialArgs = { inherit inputs; }; 
+      modules = [
+        ./alr-work/nixos/configuration.nix
+        ./alr-work/nixos/hardware-configuration.nix
+      ];
+    };
+
+    # 2. Home manager config (home-manager switch --flake .#alr-work)
+    homeConfigurations."alr-work" = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.${system};
+      # This passes 'inputs' to home.nix and hyprland.nix
+      extraSpecialArgs = { inherit inputs; }; 
+      modules = [
+        ./alr-work/home-manager/home.nix
+      ];
+    };
+  };
+}
