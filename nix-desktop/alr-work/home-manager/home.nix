@@ -71,6 +71,8 @@
 	pkgs.jetbrains.jdk
 	#pkgs.dotnetCorePackages.dotnet_9.sdk
 	pkgs.dotnetCorePackages.dotnet_10.sdk
+	# Android
+	pkgs.android-tools
 
   ];
 
@@ -90,8 +92,7 @@
   defaultEditor = true;
  
   extraLuaConfig = ''
-    vim.opt.number = true         # Show absolute line number
-    vim.opt.relativenumber = true # Optional: Show relative line numbers
+    vim.opt.number = true
   ''; 
 
 
