@@ -22,6 +22,7 @@
 	DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet"; 
   };
 
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
@@ -179,6 +180,7 @@ programs.zsh = {
         shellAliases = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
+	    vim="nvim";
         };
 
 
