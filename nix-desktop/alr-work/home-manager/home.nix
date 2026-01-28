@@ -63,6 +63,7 @@
 	pkgs.vlc
 	# Web Browser
 	pkgs.firefox
+        pkgs.ungoogled-chromium
         # Version control
         pkgs.git
 	# IDE
