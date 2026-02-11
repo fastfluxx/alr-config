@@ -20,7 +20,7 @@
     system = "x86_64-linux";
     
     # Common arguments passed to all configurations
-    sharedArgs = { inherit inputs outputs; };
+    sharedArgs = { inherit inputs; };
   in {
     
     # NixOS system config
