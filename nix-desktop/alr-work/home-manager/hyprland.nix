@@ -1,6 +1,11 @@
 { config, pkgs, inputs, ... }:
 
 {
+
+  imports = [
+    ./waybar.nix
+  ];
+
   wayland.windowManager.hyprland = {
     enable = true;
     package = null; # Use the version from the system module

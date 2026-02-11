@@ -1,5 +1,5 @@
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -7,7 +7,26 @@
       ./hosts.nix
     ];
 
+    programs.hyprland = {
+        enable = true;
+        # Using the flake input for the latest features
+        package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+        portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    };
 
+    hardware.graphics = {
+        enable = true;
+        extraPackages = with pkgs; [
+            intel-media-driver # Optimized for your Intel Ultra 7 (Meteor Lake)
+            intel-vaapi-driver
+            libvdpau-va-gl
+        ];
+    };
+
+    services.displayManager.sddm = {
+        enable = true;
+        wayland.enable = true;
+    };
 
 
   # EFI systemd bootloader
@@ -19,12 +38,31 @@
   nix.settings.experimental-features = "nix-command flakes";
 
 
+    fonts.packages = with pkgs; [
+        nerd-fonts.jetbrains-mono
+    ];
+
+    environment.sessionVariables = {
+        # Hint Electron apps (Discord, VS Code, etc.) to use Wayland
+        NIXOS_OZONE_WL = "1";
+        # Force Intel drivers for hardware acceleration
+        LIBVA_DRIVER_NAME = "iHD";
+    };
+
+
+    environment.systemPackages = with pkgs; [
+        pulseaudio      # For audio control
+        networkmanagerapplet # Wi-Fi tray icon
+        brightnessctl   # Control screen brightness (Laptop)
+    ];
+
+
   # COSMIC GDM
 
   ## COSMIC Login manager
-  services.displayManager.cosmic-greeter.enable = true;
+  #services.displayManager.cosmic-greeter.enable = true;
   ## COSMIC GDM
-  services.desktopManager.cosmic.enable = true;
+  #services.desktopManager.cosmic.enable = true;
 
   # Gnome Failover
   #services.displayManager.gdm.enable = true;
@@ -37,7 +75,7 @@
   services.hardware.bolt.enable = true;
 
 
-  networking.hostName = "alr-work"; # Define your hostname.
+  networking.hostName = "alr-workstation"; # Define your hostname.
 
 
   # Enable networking

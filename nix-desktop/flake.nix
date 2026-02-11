@@ -5,16 +5,18 @@
     
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     #nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
-    #home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+        url = "github:nix-community/home-manager"
+        inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprland.url = "github:hyprwm/Hyprland";
 
   };
 
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+  outputs = { self, nixpkgs, home-manager, hyprland, ... } @ inputs:
   let
-    inherit (self) outputs;
     system = "x86_64-linux";
     
     # Common arguments passed to all configurations
@@ -32,7 +34,8 @@
       };
 
       alr-work = nixpkgs.lib.nixosSystem {
-        specialArgs = sharedArgs;
+        inherit system;
+        specialArgs = { inherit inputs; };
         modules = [ 
 		./alr-work/nixos/configuration.nix 
 		./alr-work/nixos/hardware-configuration.nix 
@@ -51,7 +54,7 @@
 
       "alr-work" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = sharedArgs;
+        extraSpecialArgs = { inherit inputs; };
         modules = [ ./alr-work/home-manager/home.nix ];
       };
 

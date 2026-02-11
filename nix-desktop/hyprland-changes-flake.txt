@@ -9,7 +9,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Corrected spelling to 'hyprland'
     hyprland.url = "github:hyprwm/Hyprland";
   };
 
@@ -17,7 +16,6 @@
   let
     system = "x86_64-linux";
   in {
-    # 1. NixOS system config (sudo nixos-rebuild switch --flake .#alr-work)
     nixosConfigurations.alr-work = nixpkgs.lib.nixosSystem {
       inherit system;
       # This passes 'inputs' to configuration.nix
@@ -28,7 +26,6 @@
       ];
     };
 
-    # 2. Home manager config (home-manager switch --flake .#alr-work)
     homeConfigurations."alr-work" = home-manager.lib.homeManagerConfiguration {
       pkgs = nixpkgs.legacyPackages.${system};
       # This passes 'inputs' to home.nix and hyprland.nix
