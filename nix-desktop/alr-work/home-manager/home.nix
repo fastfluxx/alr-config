@@ -42,6 +42,8 @@
         pkgs.dig
         pkgs.neofetch
 	pkgs.sshfs
+ 	pkgs.nerd-fonts.jetbrains-mono
+    	pkgs.font-awesome
 	# Programming
 	pkgs.python3
 	# To enable copy-paste
