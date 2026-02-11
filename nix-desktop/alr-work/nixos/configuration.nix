@@ -32,6 +32,8 @@
     # Add PipeWire for audio
     security.rtkit.enable = true;
 
+    security.pam.services.hyprlock = {};
+
     services.pipewire = {
       enable = true;
       alsa.enable = true;
@@ -41,6 +43,12 @@
 
   # Add polkit for authentication
   security.polkit.enable = true;
+
+  # Kernel Parameters
+
+  boot.kernelParams = [
+  "video=DP-7:e"
+  ];
 
   # EFI systemd bootloader
   boot.loader.systemd-boot.enable = true;
@@ -62,12 +70,6 @@
         LIBVA_DRIVER_NAME = "iHD";
     };
 
-
-    environment.systemPackages = with pkgs; [
-        pulseaudio      # For audio control
-        networkmanagerapplet # Wi-Fi tray icon
-        brightnessctl   # Control screen brightness (Laptop)
-    ];
 
 
   # COSMIC GDM
@@ -154,6 +156,9 @@
   ebtables
   dnsmasq
   wireguard-tools
+  pulseaudio      # For audio control
+  networkmanagerapplet # Wi-Fi tray icon
+  brightnessctl   # Control screen brightness (Laptop)
   ];
 
 
