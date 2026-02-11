@@ -18,7 +18,7 @@
 
       # Autostart
       "exec-once" = [
-        "waybar"
+        #"waybar"
         "swww init"
       ];
 
@@ -37,6 +37,7 @@
 
       bind = [
         "$mod, Q, exec, kitty"
+	"$mod, T, exec, ghostty"
         "$mod, C, killactive,"
 	"$mod, L, exec, hyprlock"
         "$mod, M, exit,"
@@ -62,9 +63,11 @@
 
   # Packages needed for this specific desktop
   home.packages = with pkgs; [
-    kitty
+    ghostty
     wofi
     swww
     pavucontrol # Audio control
   ];
+
+
 }
