@@ -8,7 +8,7 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = null; # Use the version from the system module
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     portalPackage = null;
     
     settings = {
