@@ -38,7 +38,7 @@
         "$mod, Q, exec, kitty"
         "$mod, C, killactive,"
         "$mod, M, exit,"
-        "$mod, R, exec, wofi --show drun"
+        "$mod, SPACE, exec, wofi --show drun"
         "$mod, V, togglefloating,"
         
         # Focus with arrows
