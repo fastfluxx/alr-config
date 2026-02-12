@@ -14,6 +14,11 @@
     
     settings = {
       "$mod" = "SUPER";
+
+      env = [
+        "XCURSOR_THEME,Bibata-Modern-Classic"
+        "XCURSOR_SIZE,24"
+      ];
       
 
 	monitor = [
@@ -44,6 +49,7 @@
       "exec-once" = [
         "swww init"
 	    "hyprpaper"
+        "hyprctl setcursor Bibata-Modern-Classic 24"
       ];
 
       input = {
@@ -113,6 +119,15 @@
     pavucontrol # Audio control
     hyprpaper
   ];
+
+  home.pointerCursor = {
+
+    name = "Bibata-Modern-Classic";
+    package = pkgs.bibata-cursors;
+    size = 24;
+    gtk.enable = true;
+
+  };
 
 
   programs.ghostty = {
