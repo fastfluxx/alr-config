@@ -33,27 +33,28 @@
 	pkgs.screen
 	pkgs.wget
 	pkgs.htop
+	pkgs.btop
 	pkgs.tree
 	pkgs.file
 	pkgs.tldr
-        pkgs.zip
-        pkgs.p7zip
-        pkgs.bat
-        pkgs.dig
-        pkgs.neofetch
+    pkgs.zip
+    pkgs.p7zip
+    pkgs.bat
+    pkgs.dig
+    pkgs.neofetch
 	pkgs.sshfs
  	pkgs.nerd-fonts.jetbrains-mono
-    	pkgs.font-awesome
+    pkgs.font-awesome
 	# Programming
 	pkgs.python3
 	# To enable copy-paste
 	pkgs.wl-clipboard
-        # VPN
-        pkgs.wireguard-tools
-        # Picture view
-        pkgs.qimgv
+    # VPN
+    pkgs.wireguard-tools
+    # Picture view
+    pkgs.qimgv
 	# Notes
-        pkgs.obsidian
+    pkgs.obsidian
 	# File transfer
 	pkgs.filezilla
 	# Password
@@ -63,13 +64,13 @@
 	pkgs.tcpdump
 	pkgs.nmap
 	# Remote Desktop
-        pkgs.remmina
+    pkgs.remmina
 	# Video
 	pkgs.vlc
 	# Web Browser
 	pkgs.firefox
-        # Version control
-        pkgs.git
+    # Version control
+    pkgs.git
 	# IDE
 	pkgs.jetbrains.rider
 	## Rider stuff
@@ -95,9 +96,12 @@
   enable = true;
   defaultEditor = true;
  
-  extraLuaConfig = ''
-    vim.opt.number = true         # Show absolute line number
-    vim.opt.relativenumber = true # Optional: Show relative line numbers
+  initLua = ''
+    vim.opt.number = true
+    vim.opt.tabstop = 4
+    vim.opt.softtabstop = 4
+    vim.opt.shiftwidth = 4
+    vim.opt.expandtab = true
   ''; 
 
 
@@ -184,6 +188,7 @@ programs.zsh = {
         shellAliases = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
+	    vim="nvim";
         };
 
 
