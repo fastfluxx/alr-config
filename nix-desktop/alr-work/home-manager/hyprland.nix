@@ -35,15 +35,15 @@
     	"1, monitor:DP-7"
     	"2, monitor:DP-7"
     	"3, monitor:DP-7"
-	"4, monitor:DP-7"
-	"5, monitor:DP-7"
+	    "4, monitor:DP-7"
+	    "5, monitor:DP-7"
     	"10, monitor:eDP-1" # Keep workspace 10 on the laptop
   	];
 
       # Autostart
       "exec-once" = [
         "swww init"
-	"hyprpaper"
+	    "hyprpaper"
       ];
 
       input = {
@@ -61,10 +61,10 @@
 
       bind = [
         "$mod, Q, exec, kitty"
-	"$mod, T, exec, ghostty"
+	    "$mod, T, exec, ghostty"
         "$mod, C, killactive,"
-	"$mod, L, exec, hyprlock"
-	"$mod, F, exec, firefox"
+	    "$mod, L, exec, hyprlock"
+	    "$mod, F, exec, firefox"
         "$mod, M, exit,"
         "$mod, SPACE, exec, wofi --show drun"
         "$mod, V, togglefloating,"
@@ -79,18 +79,18 @@
         "$mod, 1, workspace, 1"
         "$mod, 2, workspace, 2"
         "$mod, 3, workspace, 3"
-	"$mod, 4, workspace, 4"
-	"$mod, 5, workspace, 5"
-	"$mod, 6, workspace, 6"
+	    "$mod, 4, workspace, 4"
+	    "$mod, 5, workspace, 5"
+	    "$mod, 6, workspace, 6"
 
-	# Move windows
-	"$mod CONTROL, left,  movewindow, l"
+	    # Move windows
+	    "$mod CONTROL, left,  movewindow, l"
     	"$mod CONTROL, right, movewindow, r"
     	"$mod CONTROL, up,    movewindow, u"
     	"$mod CONTROL, down,  movewindow, d"
 
-	# Move windows to workspace
-	"$mod SHIFT, 1, movetoworkspace, 1"
+	    # Move windows to workspace
+	    "$mod SHIFT, 1, movetoworkspace, 1"
     	"$mod SHIFT, 2, movetoworkspace, 2"
     	"$mod SHIFT, 3, movetoworkspace, 3"
     	"$mod SHIFT, 4, movetoworkspace, 4"
@@ -107,8 +107,7 @@
 
   # Packages needed for this specific desktop
   home.packages = with pkgs; [
-    kitty
-    ghostty
+    kitty # Kitty for backup
     wofi
     swww
     pavucontrol # Audio control
@@ -116,6 +115,20 @@
   ];
 
 
+  programs.ghostty = {
+
+    enable = true;
+    enableZshIntegration = true;
+
+    settings = {
+
+    "theme" = "Catppuccin Mocha";
+    "font-family" = "Monaco";
+    "font-size" = 16;
+
+    };
+
+  };
 
 
   services.hyprpaper = {
