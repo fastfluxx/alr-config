@@ -15,8 +15,8 @@
         spacing = 4;
 
         modules-left = [ "hyprland/workspaces" "hyprland/submap" ];
-        modules-center = [ "hyprland/window" ];
-        modules-right = [ "pulseaudio" "bluetooth" "network" "cpu" "memory" "battery" "clock" "tray" ];
+        modules-center = [ "clock" "hyprland/window" ];
+        modules-right = [ "pulseaudio" "bluetooth" "network" "cpu" "memory" "battery" "tray" ];
 
         "hyprland/workspaces" = {
           on-click = "activate";
@@ -150,6 +150,7 @@
 
       #clock {
         color: #fab387;
+	font-size: 16px;
       }
 
       #pulseaudio {
