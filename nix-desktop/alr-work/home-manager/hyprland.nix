@@ -7,6 +7,9 @@
     ./hyprlock.nix
   ];
 
+
+  home.file."wallpapers/Fantasy-Autumn.png".source = ../../wallpaper/Fantasy-Autumn.png;
+
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -47,8 +50,8 @@
 
       # Autostart
       "exec-once" = [
-        "swww init"
-	    "hyprpaper"
+        "swww-daemon"
+	    "sleep 1 && swww img ~/wallpapers/Fantasy-Autumn.png --transition-type fade --transition-duration 2"
         "hyprctl setcursor Bibata-Modern-Classic 24"
       ];
 
