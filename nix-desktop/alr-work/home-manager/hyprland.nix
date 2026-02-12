@@ -38,12 +38,12 @@
 	"4, monitor:DP-7"
 	"5, monitor:DP-7"
     	"10, monitor:eDP-1" # Keep workspace 10 on the laptop
-  ];
+  	];
 
       # Autostart
       "exec-once" = [
-        #"waybar"
         "swww init"
+	"hyprpaper"
       ];
 
       input = {
@@ -64,6 +64,7 @@
 	"$mod, T, exec, ghostty"
         "$mod, C, killactive,"
 	"$mod, L, exec, hyprlock"
+	"$mod, F, exec, firefox"
         "$mod, M, exit,"
         "$mod, SPACE, exec, wofi --show drun"
         "$mod, V, togglefloating,"
@@ -81,17 +82,57 @@
 	"$mod, 4, workspace, 4"
 	"$mod, 5, workspace, 5"
 	"$mod, 6, workspace, 6"
+
+	# Move windows
+	"$mod CONTROL, left,  movewindow, l"
+    	"$mod CONTROL, right, movewindow, r"
+    	"$mod CONTROL, up,    movewindow, u"
+    	"$mod CONTROL, down,  movewindow, d"
+
+	# Move windows to workspace
+	"$mod SHIFT, 1, movetoworkspace, 1"
+    	"$mod SHIFT, 2, movetoworkspace, 2"
+    	"$mod SHIFT, 3, movetoworkspace, 3"
+    	"$mod SHIFT, 4, movetoworkspace, 4"
+    	"$mod SHIFT, 5, movetoworkspace, 5"
+    	"$mod SHIFT, 6, movetoworkspace, 6"
+    	"$mod SHIFT, 7, movetoworkspace, 7"
+    	"$mod SHIFT, 8, movetoworkspace, 8"
+    	"$mod SHIFT, 9, movetoworkspace, 9"
+    	"$mod SHIFT, 0, movetoworkspace, 10"
+
       ];
     };
   };
 
   # Packages needed for this specific desktop
   home.packages = with pkgs; [
+    kitty
     ghostty
     wofi
     swww
     pavucontrol # Audio control
+    hyprpaper
   ];
+
+
+
+
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      ipc = "on";
+      splash = false;
+      preload = [
+        # Using a path literal (no quotes) makes Nix handle the relative path
+        "${../../wallpaper/Fantasy-Autumn.png}"
+      ];
+      wallpaper = [
+        "DP-7,${../../wallpaper/Fantasy-Autumn.png}"
+        "eDP-1,${../../wallpaper/Fantasy-Autumn.png}"
+      ];
+    };
+  };
 
 
 }
