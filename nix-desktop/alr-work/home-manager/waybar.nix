@@ -2,8 +2,15 @@
 
 {
   programs.waybar = {
+
     enable = true;
-    systemd.enable = true; # Ensures Waybar starts/restarts with your session
+
+
+    systemd = {
+        enable = true;
+        target = "hyprland-session.target";
+    };
+
     settings = {
       mainBar = {
         layer = "top";
