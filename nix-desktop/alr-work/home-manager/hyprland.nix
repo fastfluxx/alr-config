@@ -21,8 +21,13 @@
       env = [
         "XCURSOR_THEME,Bibata-Modern-Classic"
         "XCURSOR_SIZE,24"
+        # Ghostty
+        "QT_QPA_PLATFORM,wayland"
+        "GDK_BACKEND,wayland"
+        "XDG_SESSION_TYPE,wayland"
       ];
-      
+
+
 
 	monitor = [
 
@@ -45,11 +50,17 @@
     	"3, monitor:DP-7"
 	    "4, monitor:DP-7"
 	    "5, monitor:DP-7"
+        "6, monitor:DP-7"
+        "7, monitor:DP-7"
+        "8, monitor:DP-7"
+        "9, monitor:DP-7"
     	"10, monitor:eDP-1" # Keep workspace 10 on the laptop
   	];
 
       # Autostart
       "exec-once" = [
+        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "swww-daemon"
 	    "sleep 1 && swww img ~/wallpapers/Fantasy-Autumn.png --transition-type fade --transition-duration 2"
         "hyprctl setcursor Bibata-Modern-Classic 24"
@@ -57,6 +68,8 @@
 
       input = {
         kb_layout = "no"; # Norwegian layout
+        kb_variant = "";
+        kb_options = "";
         follow_mouse = 1;
         touchpad.natural_scroll = true;
       };
@@ -91,6 +104,10 @@
 	    "$mod, 4, workspace, 4"
 	    "$mod, 5, workspace, 5"
 	    "$mod, 6, workspace, 6"
+        "$mod, 7, workspace, 7"
+        "$mod, 8, workspace, 8"
+        "$mod, 9, workspace, 9"
+
 
 	    # Move windows
 	    "$mod CONTROL, left,  movewindow, l"
@@ -148,22 +165,6 @@
 
   };
 
-
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      ipc = "on";
-      splash = false;
-      preload = [
-        # Using a path literal (no quotes) makes Nix handle the relative path
-        "${../../wallpaper/Fantasy-Autumn.png}"
-      ];
-      wallpaper = [
-        "DP-7,${../../wallpaper/Fantasy-Autumn.png}"
-        "eDP-1,${../../wallpaper/Fantasy-Autumn.png}"
-      ];
-    };
-  };
 
 
 }
