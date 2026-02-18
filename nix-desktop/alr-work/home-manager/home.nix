@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+
+  imports = [
+    ./hyprland.nix
+  ];
   # Home config
   home.username = "alr";
   home.homeDirectory = "/home/alr";
@@ -30,25 +34,30 @@
 	pkgs.screen
 	pkgs.wget
 	pkgs.htop
+	pkgs.btop
 	pkgs.tree
 	pkgs.file
 	pkgs.tldr
-        pkgs.zip
-        pkgs.p7zip
-        pkgs.bat
-        pkgs.dig
-        pkgs.neofetch
+    pkgs.zip
+    pkgs.p7zip
+    pkgs.bat
+    pkgs.dig
+    pkgs.neofetch
 	pkgs.sshfs
+ 	pkgs.nerd-fonts.jetbrains-mono
+    pkgs.font-awesome
 	# Programming
 	pkgs.python3
 	# To enable copy-paste
 	pkgs.wl-clipboard
-        # VPN
-        pkgs.wireguard-tools
-        # Picture view
-        pkgs.qimgv
+    # VPN
+    pkgs.wireguard-tools
+    # Picture view
+    pkgs.qimgv
+    # Terminal File Manager
+    pkgs.yazi
 	# Notes
-        pkgs.obsidian
+    pkgs.obsidian
 	# File transfer
 	pkgs.filezilla
 	# Password
@@ -58,14 +67,14 @@
 	pkgs.tcpdump
 	pkgs.nmap
 	# Remote Desktop
-        pkgs.remmina
+    pkgs.remmina
 	# Video
 	pkgs.vlc
 	# Web Browser
 	pkgs.firefox
-        pkgs.ungoogled-chromium
-        # Version control
-        pkgs.git
+    pkgs.ungoogled-chromium
+    # Version control
+    pkgs.git
 	# IDE
 	pkgs.jetbrains.rider
 	## Rider stuff
@@ -92,11 +101,19 @@
 
   enable = true;
   defaultEditor = true;
+<<<<<<< HEAD
 
 
   extraLuaConfig = ''
     vim.opt.number = true
     vim.opt.relativenumber = false
+=======
+ 
+  initLua = ''
+    vim.opt.number = true
+    vim.opt.tabstop = 4
+    vim.opt.softtabstop = 4
+>>>>>>> hyprland
     vim.opt.shiftwidth = 4
     vim.opt.expandtab = true
   ''; 

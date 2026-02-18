@@ -1,5 +1,5 @@
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -7,8 +7,51 @@
       ./hosts.nix
     ];
 
+    programs.hyprland = {
+        enable = true;
+        # Using the flake input for the latest features
+        package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+        portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    };
+
+    hardware.graphics = {
+        enable = true;
+        extraPackages = with pkgs; [
+            intel-media-driver # Optimized for your Intel Ultra 7 (Meteor Lake)
+            intel-vaapi-driver
+            libvdpau-va-gl
+        ];
+    };
+
+    services.displayManager.sddm = {
+        enable = true;
+        wayland.enable = true;
+    };
 
 
+    # Add PipeWire for audio
+    security.rtkit.enable = true;
+
+    security.pam.services.hyprlock = {};
+
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+    };
+
+    services.blueman.enable = true;
+
+  # Add polkit for authentication
+  security.polkit.enable = true;
+
+  # Kernel Parameters
+
+  boot.kernelParams = [
+  "video=DP-7:e"
+  ];
 
   # EFI systemd bootloader
   boot.loader.systemd-boot.enable = true;
@@ -19,12 +62,25 @@
   nix.settings.experimental-features = "nix-command flakes";
 
 
+    fonts.packages = with pkgs; [
+        nerd-fonts.jetbrains-mono
+    ];
+
+    environment.sessionVariables = {
+        # Hint Electron apps (Discord, VS Code, etc.) to use Wayland
+        NIXOS_OZONE_WL = "1";
+        # Force Intel drivers for hardware acceleration
+        LIBVA_DRIVER_NAME = "iHD";
+    };
+
+
+
   # COSMIC GDM
 
   ## COSMIC Login manager
-  services.displayManager.cosmic-greeter.enable = true;
+  #services.displayManager.cosmic-greeter.enable = true;
   ## COSMIC GDM
-  services.desktopManager.cosmic.enable = true;
+  #services.desktopManager.cosmic.enable = true;
 
   # Gnome Failover
   #services.displayManager.gdm.enable = true;
@@ -37,7 +93,7 @@
   services.hardware.bolt.enable = true;
 
 
-  networking.hostName = "alr-work"; # Define your hostname.
+  networking.hostName = "alr-workstation"; # Define your hostname.
 
 
   # Enable networking
@@ -89,7 +145,7 @@
     isNormalUser = true;
     description = "alr";
     shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" "docker" "video" ];
     packages = with pkgs; [];
   };
 
@@ -103,6 +159,9 @@
   ebtables
   dnsmasq
   wireguard-tools
+  pulseaudio      # For audio control
+  networkmanagerapplet # Wi-Fi tray icon
+  brightnessctl   # Control screen brightness (Laptop)
   ];
 
 

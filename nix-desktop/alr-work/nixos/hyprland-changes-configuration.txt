@@ -1,0 +1,55 @@
+{ config, pkgs, inputs, ... }: {
+
+  # 1. Enable Hyprland (System Level)
+  programs.hyprland = {
+    enable = true;
+    # Using the flake input for the latest features
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+  };
+
+  # 2. Modernized Hardware & Graphics (Fixes the 'opengl' warning)
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # Optimized for your Intel Ultra 7 (Meteor Lake)
+      intel-vaapi-driver
+      libvdpau-va-gl
+    ];
+  };
+
+  # 3. Modernized Display Manager (Fixes 'xserver' warnings)
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
+  
+  # If you want to keep COSMIC available, keep its enable line, 
+  # but ensure it uses the new naming convention:
+  services.desktopManager.plasma6.enable = false; # Set to true if you still want Plasma
+  # services.desktopManager.cosmic.enable = true; 
+
+  # 4. Fonts (Essential for Waybar icons)
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
+
+  # 5. Environment Variables for Wayland/Intel
+  environment.sessionVariables = {
+    # Hint Electron apps (Discord, VS Code, etc.) to use Wayland
+    NIXOS_OZONE_WL = "1";
+    # Force Intel drivers for hardware acceleration
+    LIBVA_DRIVER_NAME = "iHD";
+  };
+
+  # 6. Essential System Packages for Wayland
+  environment.systemPackages = with pkgs; [
+    pulseaudio      # For audio control
+    networkmanagerapplet # Wi-Fi tray icon
+    brightnessctl   # Control screen brightness (Laptop)
+  ];
+
+  # --- Keep your existing Networking, Timezone, User, and Bootloader settings below ---
+  # networking.hostName = "alr-work";
+  # ... etc ...
+}
