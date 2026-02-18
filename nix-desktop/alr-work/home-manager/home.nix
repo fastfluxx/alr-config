@@ -53,6 +53,8 @@
     pkgs.wireguard-tools
     # Picture view
     pkgs.qimgv
+    # Terminal File Manager
+    pkgs.yazi
 	# Notes
     pkgs.obsidian
 	# File transfer

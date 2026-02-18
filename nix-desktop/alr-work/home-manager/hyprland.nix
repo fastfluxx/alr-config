@@ -57,6 +57,8 @@
     	"10, monitor:eDP-1" # Keep workspace 10 on the laptop
   	];
 
+
+
       # Autostart
       "exec-once" = [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
@@ -80,6 +82,12 @@
         border_size = 2;
         "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
       };
+
+
+      bindm = [
+        "$mod, mouse:272, movewindow"
+        "$mod, mouse:273, resizewindow"
+      ];
 
       bind = [
         "$mod, Q, exec, kitty"
@@ -137,7 +145,6 @@
     wofi
     swww
     pavucontrol # Audio control
-    hyprpaper
   ];
 
   home.pointerCursor = {

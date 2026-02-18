@@ -16,8 +16,8 @@
 
       background = [{
         monitor = ""; # Empty means all monitors
-        #path = "/home/alr/projects/wallpaper.png"; # Replace YOUR_USER
-        blur_passes = 2;
+        path = "/home/alr/Pictures/Laud/LM-Backgrop.png";
+        blur_passes = 1;
         color = "rgba(25, 20, 20, 1.0)";
       }];
 
@@ -31,8 +31,8 @@
         outer_color = "rgba(0, 0, 0, 0)";
         inner_color = "rgba(0, 0, 0, 0.5)";
         font_color = "rgb(200, 200, 200)";
-        fade_on_empty = false;
-        placeholder_text = "<i>Enter Password...</i>";
+        fade_on_empty = true;
+        placeholder_text = "<i>Password...</i>";
         hide_input = false;
         position = "0, -120";
         halign = "center";

@@ -29,13 +29,17 @@
           on-click = "activate";
           format = "{icon}";
           format-icons = {
-            "1" = "";
-            "2" = "";
-            "3" = "";
-            "4" = "";
-            "5" = "";
+            "1" = "󰨇";
+            "2" = "󰨇";
+            "3" = "󰨇";
+            "4" = "󰨇";
+            "5" = "󰨇";
+            "6" = "󰨇";
+            "7" = "󰨇";
+            "8" = "󰨇";
+            "9" = "󰨇";
             urgent = "";
-            active = "";
+            active = "󱎴";
             default = "";
           };
         };
@@ -47,18 +51,18 @@
         };
 
         "clock" = {
-          format = "{:%H:%M} ";
+          format = "  {:%Y-%m-%d   %H:%M} ";
           format-alt = "{:%A, %B %d, %Y (%R)} ";
           tooltip-format = "<tt><small>{calendar}</small></tt>";
         };
 
         "cpu" = {
-          format = "{usage}% ";
+          format = "[   {usage}% ]";
           tooltip = false;
         };
 
         "memory" = {
-          format = "{}% ";
+          format = "[   {used} / {total}]";
         };
 
 	"battery" = {
@@ -66,18 +70,18 @@
 	    	warning = 30;
     		critical = 15;
   	};
-	  format = "{capacity}% {icon}";
-	  format-charging = "{capacity}% ";
-	  format-plugged = "{capacity}% ";
+	  format = " [{icon} {capacity}%]    ";
+	  format-charging = "{capacity}%  ";
+	  format-plugged = " [     {capacity}% ]    ";
 	  format-alt = "{time} {icon}";
 	  # Icons change based on charge level
 	  format-icons = ["" "" "" "" ""];
 	};
 
 	"bluetooth" = {
-  		format = " {status}";
-	  	format-connected = " {device_alias}";
-  		format-connected-battery = " {device_alias} {device_battery_percentage}%";
+  		format = "[  {status} ]";
+	  	format-connected = "[  {device_alias} ]";
+  		format-connected-battery = "[  {device_alias} {device_battery_percentage}% ]";
   		# format-device-preference = [ "device1", "device2" ]; # preference list deciding the displayed device
   		tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
   		tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
@@ -92,8 +96,8 @@
 	};
 
         "pulseaudio" = {
-          format = "{volume}% {icon}";
-          format-bluetooth = "{volume}% {icon}";
+          format = "[ {icon}  {volume}% ]";
+          format-bluetooth = "[ {volume}% {icon} ]";
           format-muted = "";
           format-icons = {
             headphone = "";
@@ -108,9 +112,9 @@
         };
 
         "network" = {
-          format-wifi = "{essid} ({signalStrength}%) ";
-          format-ethernet = "{ipaddr} ";
-          format-disconnected = "Disconnected ⚠";
+          format-wifi = "[   {essid} : {ipaddr} ]";
+          format-ethernet = "[ 󰈀 {ipaddr} / {cidr} ]";
+          format-disconnected = "[ 󰌙 Network Disconnected ]";
         };
       };
     };
@@ -120,7 +124,7 @@
         border: none;
         border-radius: 0;
         font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 13px;
+        font-size: 14px;
         min-height: 0;
       }
 
