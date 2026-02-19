@@ -26,7 +26,8 @@
     # NixOS system config
     nixosConfigurations = {
       alr-home = nixpkgs.lib.nixosSystem {
-        specialArgs = sharedArgs;
+        inherit system;
+        specialArgs = { inherit inputs; };
         modules = [ 
 		./alr-home/nixos/configuration.nix 
 		./alr-home/nixos/hardware-configuration.nix

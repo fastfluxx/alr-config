@@ -101,19 +101,13 @@
 
   enable = true;
   defaultEditor = true;
-<<<<<<< HEAD
 
 
-  extraLuaConfig = ''
-    vim.opt.number = true
-    vim.opt.relativenumber = false
-=======
- 
+
   initLua = ''
     vim.opt.number = true
     vim.opt.tabstop = 4
     vim.opt.softtabstop = 4
->>>>>>> hyprland
     vim.opt.shiftwidth = 4
     vim.opt.expandtab = true
   ''; 

@@ -5,6 +5,7 @@
   imports = [
     ./waybar.nix
     ./hyprlock.nix
+    ./hypridle.nix
   ];
 
 

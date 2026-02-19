@@ -28,17 +28,17 @@
 	pkgs.tree
 	pkgs.file
 	pkgs.tldr
-        pkgs.zip
-        pkgs.p7zip
-        pkgs.bat
-        pkgs.dig
-        pkgs.neofetch
-        # VPN
-        pkgs.wireguard-tools
-        # Picture view
-        pkgs.qimgv
+    pkgs.zip
+    pkgs.p7zip
+    pkgs.bat
+    pkgs.dig
+    pkgs.neofetch
+    # VPN
+    pkgs.wireguard-tools
+    # Picture view
+    pkgs.qimgv
 	# Notes
-        pkgs.obsidian
+    pkgs.obsidian
 	# File transfer
 	pkgs.filezilla
 	# Password
@@ -46,14 +46,13 @@
 	# Network Analyze
 	pkgs.wireshark
 	# Remote Desktop
-        pkgs.remmina
-        #pkgs.gnome.vinagre
+    pkgs.remmina
 	# Video
 	pkgs.vlc
 	# Web Browser
 	pkgs.firefox
-        # Version control
-        pkgs.git
+    # Version control
+    pkgs.git
   ];
 
 
