@@ -28,6 +28,10 @@
         "XDG_SESSION_TYPE,wayland"
       ];
 
+    bindl = [
+      ", switch:on:Lid Switch, exec, hyprctl keyword monitor \"eDP-1, disable\""
+      ", switch:off:Lid Switch, exec, hyprctl keyword monitor \"eDP-1, preferred, auto, 1\""
+    ];
 
 
 	monitor = [
