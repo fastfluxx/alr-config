@@ -44,7 +44,7 @@
     pkgs.p7zip
     pkgs.bat
     pkgs.dig
-    pkgs.neofetch
+    pkgs.fastfetch
 	pkgs.sshfs
  	pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
