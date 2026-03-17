@@ -1,10 +1,57 @@
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
+  imports =
+    [
+      #./hosts.nix
+    ];
+
+    programs.hyprland = {
+        enable = true;
+        # Using the flake input for the latest features
+        package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+        portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    };
+
+    hardware.graphics = {
+        enable = true;
+        extraPackages = with pkgs; [
+            intel-media-driver # Optimized for your Intel Ultra 7 (Meteor Lake)
+            intel-vaapi-driver
+            libvdpau-va-gl
+        ];
+    };
+
+    services.displayManager.sddm = {
+        enable = true;
+        wayland.enable = true;
+    };
 
 
+    # Add PipeWire for audio
+    security.rtkit.enable = true;
 
+    security.pam.services.hyprlock = {};
+
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+    };
+
+    services.blueman.enable = true;
+
+  # Add polkit for authentication
+  security.polkit.enable = true;
+
+  # Kernel Parameters
+
+  boot.kernelParams = [
+  #"video=DP-7:e"
+  ];
 
   # EFI systemd bootloader
   boot.loader.systemd-boot.enable = true;
@@ -15,23 +62,45 @@
   nix.settings.experimental-features = "nix-command flakes";
 
 
+    fonts.packages = with pkgs; [
+        nerd-fonts.jetbrains-mono
+    ];
+
+    environment.sessionVariables = {
+        # Hint Electron apps (Discord, VS Code, etc.) to use Wayland
+        NIXOS_OZONE_WL = "1";
+        # Force Intel drivers for hardware acceleration
+        LIBVA_DRIVER_NAME = "iHD";
+    };
+
+
+
   # COSMIC GDM
 
   ## COSMIC Login manager
-  services.displayManager.cosmic-greeter.enable = true;
+  #services.displayManager.cosmic-greeter.enable = true;
   ## COSMIC GDM
-  services.desktopManager.cosmic.enable = true;
+  #services.desktopManager.cosmic.enable = true;
 
   # Gnome Failover
   #services.displayManager.gdm.enable = true;
   #services.desktopManager.gnome.enable = true;
 
-  networking.hostName = "alr-nix"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Docking Requirements
+  hardware.enableRedistributableFirmware = true;
+  services.udev.packages = [ pkgs.bolt ];
+  services.hardware.bolt.enable = true;
+
+
+  networking.hostName = "alr-home"; # Define your hostname.
 
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  networking.nameservers = [ "1.1.1.1" ];
+
 
   # Enable bluetooth
   hardware.bluetooth.enable = true;
@@ -49,13 +118,24 @@
     xkb.variant = "";
   };
 
+
   services.syncthing = {
-    enable = true;
-    dataDir = "/home/alr/syncthing";
-    user = "alr";
+  enable = true;
+  dataDir = "/home/alr/syncthing";
+  user = "alr";
   };
 
-  
+
+  # Enable virtualization (KVM/QEMU)
+  virtualisation.libvirtd.enable = true;
+
+
+  # Enable virtualization (Docker)
+  virtualisation.docker = {
+    enable = true;
+
+  };
+
 
   # Configure console keymap
   console.keyMap = "no";
@@ -65,24 +145,31 @@
     isNormalUser = true;
     description = "alr";
     shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "kvm" "docker" "video" ];
     packages = with pkgs; [];
   };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
   git
+  vim
+  iptables
+  ebtables
+  dnsmasq
+  wireguard-tools
+  pulseaudio      # For audio control
+  networkmanagerapplet # Wi-Fi tray icon
+  brightnessctl   # Control screen brightness (Laptop)
   ];
+
 
 
 
   programs.zsh.enable = true;
 
-   
-
+  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

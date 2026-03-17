@@ -49,7 +49,7 @@
     homeConfigurations = {
       "alr-home" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = sharedArgs;
+        extraSpecialArgs = { inherit inputs; };
         modules = [ ./alr-home/home-manager/home.nix ];
       };
 

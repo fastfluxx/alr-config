@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+
+  imports = [
+    ./hyprland.nix
+  ];
   # Home config
   home.username = "alr";
   home.homeDirectory = "/home/alr";
@@ -18,6 +22,11 @@
   	allowUnfree = true;
   };
 
+  home.sessionVariables = {
+	DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet"; 
+  };
+
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
@@ -25,34 +34,55 @@
 	pkgs.screen
 	pkgs.wget
 	pkgs.htop
+	pkgs.btop
 	pkgs.tree
 	pkgs.file
 	pkgs.tldr
-    pkgs.zip
-    pkgs.p7zip
-    pkgs.bat
-    pkgs.dig
-    pkgs.neofetch
-    # VPN
-    pkgs.wireguard-tools
-    # Picture view
-    pkgs.qimgv
+    	pkgs.zip
+    	pkgs.p7zip
+    	pkgs.bat
+    	pkgs.dig
+    	pkgs.neofetch
+	pkgs.sshfs
+ 	pkgs.nerd-fonts.jetbrains-mono
+    	pkgs.font-awesome
+	# Programming
+	pkgs.python3
+	# To enable copy-paste
+	pkgs.wl-clipboard
+    	# VPN
+    	pkgs.wireguard-tools
+    	# Picture view
+    	pkgs.qimgv
+    	# Terminal File Manager
+    	pkgs.yazi
 	# Notes
-    pkgs.obsidian
+    	pkgs.obsidian
 	# File transfer
 	pkgs.filezilla
 	# Password
-	pkgs.bitwarden
+	pkgs.bitwarden-desktop
 	# Network Analyze
 	pkgs.wireshark
+	pkgs.tcpdump
+	pkgs.nmap
 	# Remote Desktop
-    pkgs.remmina
+    	pkgs.remmina
 	# Video
 	pkgs.vlc
 	# Web Browser
 	pkgs.firefox
-    # Version control
-    pkgs.git
+    	pkgs.ungoogled-chromium
+    	# Version control
+    	pkgs.git
+	# IDE
+	pkgs.jetbrains.rider
+	## Rider stuff
+	pkgs.dotnet-ef
+	pkgs.jetbrains.jdk
+	#pkgs.dotnetCorePackages.dotnet_9.sdk
+	pkgs.dotnetCorePackages.dotnet_10.sdk
+	pkgs.kdePackages.kdenlive
   ];
 
 
@@ -69,14 +99,22 @@
 
   enable = true;
   defaultEditor = true;
-  
 
-  extraPackages = with pkgs.vimPlugins; [
 
-    #vim-plug
-  ];
+
+  initLua = ''
+    vim.opt.number = true
+    vim.opt.tabstop = 4
+    vim.opt.softtabstop = 4
+    vim.opt.shiftwidth = 4
+    vim.opt.expandtab = true
+  ''; 
+
+
 
   };
+
+
 
   programs.gpg = {
     enable = true;
@@ -86,30 +124,50 @@
 
   programs.ssh = {
     enable = true;
+
+    enableDefaultConfig = false; 
     
-    extraConfig = ''    
 
 
-    '';
+	matchBlocks = {
+      	# Block 1: A general block for all hosts (*)
+      	# You must define this if you set enableDefaultConfig = false
+      	"*" = {
+        # Common options for all connections
+        # The value must be a string, or true/false for boolean options.
+        user = config.home.username; # Default user for all hosts
+        serverAliveInterval = 60;
+      	};
+
+      # Block 2: Specific configuration for a remote server
+      	"github.com" = {
+        	hostname = "github.com";
+        	user = "git";
+        	identityFile = [ "~/.ssh/alr.priv" ]; # Specific key for GitHub
+        	identitiesOnly = true; # Only use the key specified above
+      	};
+
 
   };
+
+};
 
 programs.zsh = {
 
         enable = true;
         autosuggestion.enable = true;
 
-        #enableCompletion = true;
 
         oh-my-zsh = {
           enable = true;
           theme = "agnoster";  
           plugins = [ "git" "z" "sudo" "docker" ];
-    };
+    	};
 
         shellAliases = {
-            cat = "bat -p";
+            cat="bat -p";
             ssh="TERM=xterm-256color ssh";
+	    vim="nvim";
         };
 
 
