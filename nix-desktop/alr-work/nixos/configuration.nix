@@ -44,6 +44,7 @@
 
     services.blueman.enable = true;
 
+
   # Add polkit for authentication
   security.polkit.enable = true;
 
