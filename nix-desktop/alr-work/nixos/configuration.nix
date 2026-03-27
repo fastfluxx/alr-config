@@ -160,9 +160,10 @@
   ebtables
   dnsmasq
   wireguard-tools
-  pulseaudio      # For audio control
-  networkmanagerapplet # Wi-Fi tray icon
-  brightnessctl   # Control screen brightness (Laptop)
+  virtiofsd             # Tool for sharing directoies from host to VM
+  pulseaudio            # For audio control
+  networkmanagerapplet  # Wi-Fi tray icon
+  brightnessctl         # Control screen brightness (Laptop)
   ];
 
 
