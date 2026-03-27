@@ -40,6 +40,13 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       wireplumber.enable = true;
+
+      wireplumber.extraConfig = {
+        "monitor.bluez.properties" = {
+            "bluez5.codecs" = [ "sbc" "sbc_xq" "aac" "aptx" "aptx_hd" ];
+    };
+  };
+
     };
 
     services.blueman.enable = true;
