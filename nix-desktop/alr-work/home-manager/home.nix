@@ -198,7 +198,8 @@ programs.zsh = {
         shellAliases = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
-	    vim="nvim";
+	        vim="nvim";
+            nix-clean="sudo nix-collect-garbage --delete-older-than 15d && sudo nixos-rebuild boot --flake .#alr-work";
         };
 
 
