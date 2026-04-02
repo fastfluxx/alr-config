@@ -40,6 +40,13 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       wireplumber.enable = true;
+
+      wireplumber.extraConfig = {
+        "monitor.bluez.properties" = {
+            "bluez5.codecs" = [ "sbc" "sbc_xq" "aac" "aptx" "aptx_hd" ];
+    };
+  };
+
     };
 
     services.blueman.enable = true;
@@ -160,9 +167,10 @@
   ebtables
   dnsmasq
   wireguard-tools
-  pulseaudio      # For audio control
-  networkmanagerapplet # Wi-Fi tray icon
-  brightnessctl   # Control screen brightness (Laptop)
+  virtiofsd             # Tool for sharing directoies from host to VM
+  pulseaudio            # For audio control
+  networkmanagerapplet  # Wi-Fi tray icon
+  brightnessctl         # Control screen brightness (Laptop)
   ];
 
 
