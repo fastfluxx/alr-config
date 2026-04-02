@@ -38,26 +38,26 @@
 	pkgs.tree
 	pkgs.file
 	pkgs.tldr
-    	pkgs.zip
-    	pkgs.p7zip
-    	pkgs.bat
-    	pkgs.dig
-    	pkgs.neofetch
+    pkgs.zip
+    pkgs.p7zip
+    pkgs.bat
+    pkgs.dig
+    pkgs.fastfetch
 	pkgs.sshfs
  	pkgs.nerd-fonts.jetbrains-mono
-    	pkgs.font-awesome
+    pkgs.font-awesome
 	# Programming
 	pkgs.python3
 	# To enable copy-paste
 	pkgs.wl-clipboard
-    	# VPN
-    	pkgs.wireguard-tools
-    	# Picture view
-    	pkgs.qimgv
-    	# Terminal File Manager
-    	pkgs.yazi
+    # VPN
+    pkgs.wireguard-tools
+    # Picture view
+    pkgs.qimgv
+    # Terminal File Manager
+    pkgs.yazi
 	# Notes
-    	pkgs.obsidian
+    pkgs.obsidian
 	# File transfer
 	pkgs.filezilla
 	# Password
@@ -67,14 +67,14 @@
 	pkgs.tcpdump
 	pkgs.nmap
 	# Remote Desktop
-    	pkgs.remmina
+    pkgs.remmina
 	# Video
 	pkgs.vlc
 	# Web Browser
 	pkgs.firefox
-    	pkgs.ungoogled-chromium
-    	# Version control
-    	pkgs.git
+    pkgs.ungoogled-chromium
+    # Version control
+    pkgs.git
 	# IDE
 	pkgs.jetbrains.rider
 	## Rider stuff
