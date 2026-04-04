@@ -34,6 +34,16 @@
 		 ];
       };
 
+    alr-game = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; };
+        modules = [ 
+		./alr-game/nixos/configuration.nix 
+		./alr-game/nixos/hardware-configuration.nix
+		 ];
+      };
+
+
       alr-work = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
@@ -51,6 +61,12 @@
         pkgs = nixpkgs.legacyPackages.${system};
         extraSpecialArgs = { inherit inputs; };
         modules = [ ./alr-home/home-manager/home.nix ];
+      };
+
+      "alr-game" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        extraSpecialArgs = { inherit inputs; };
+        modules = [ ./alr-game/home-manager/home.nix ];
       };
 
       "alr-work" = home-manager.lib.homeManagerConfiguration {
