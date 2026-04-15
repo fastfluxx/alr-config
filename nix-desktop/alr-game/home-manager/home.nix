@@ -161,6 +161,15 @@ programs.zsh = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
 	        vim="nvim";
+
+            # Toggle Air-Gap ON
+            gap-on  = "sudo /run/current-system/specialisation/airgap/bin/switch-to-configuration test";
+    
+            # Toggle Air-Gap OFF (Returns to the main system config)
+            gap-off = "sudo /run/current-system/bin/switch-to-configuration test";
+    
+            # Check if we are currently in the airgap specialisation
+            gap-status = "grep -q 'air-gapped' /run/current-system/kernel-params && echo 'Air-Gap: ON' || echo 'Air-Gap: OFF'";
         };
 
 

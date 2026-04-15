@@ -113,6 +113,42 @@
   networking.nameservers = [ "1.1.1.1" ];
 
 
+  networking.firewall.enalbe = true;
+
+
+  # --- Air-Gap Specialisation ---
+  specialisation.airgap.configuration = {
+    system.nixos.tags = [ "air-gapped" ];
+
+
+  networking.firewall = {
+      # 1. Block everything by default
+      extraCommands = ''
+        # Flush existing custom chains
+        iptables -F OUTPUT
+        
+        # Set default policy to DROP for outgoing
+        iptables -P OUTPUT DROP
+
+        # Allow Loopback (Internal system comms)
+        iptables -A OUTPUT -o lo -j ACCEPT
+
+        # Allow Local LAN Traffic (Edit these ranges as needed)
+        iptables -A OUTPUT -d 192.168.15.0/24 -j ACCEPT
+        
+        # Allow Multicast/mDNS (Optional: for .local addresses)
+        iptables -A OUTPUT -d 224.0.0.0/4 -j ACCEPT
+      '';
+
+      # Ensure we clean up when switching back
+      extraStopCommands = ''
+        iptables -P OUTPUT ACCEPT
+      '';
+    };
+
+    };
+  
+
 
   # Set your time zone.
   time.timeZone = "Europe/Oslo";
