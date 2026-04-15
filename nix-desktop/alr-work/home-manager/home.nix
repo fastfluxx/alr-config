@@ -84,7 +84,11 @@
 	pkgs.dotnet-ef
 	pkgs.jetbrains.jdk
 	#pkgs.dotnetCorePackages.dotnet_9.sdk
-	pkgs.dotnetCorePackages.dotnet_10.sdk
+	#pkgs.dotnetCorePackages.dotnet_10.sdk
+    (pkgs.dotnetCorePackages.combinePackages [
+    pkgs.dotnetCorePackages.dotnet_9.sdk
+    pkgs.dotnetCorePackages.dotnet_10.sdk
+    ])
 	# Android
 	pkgs.android-tools
 

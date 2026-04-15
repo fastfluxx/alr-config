@@ -56,10 +56,23 @@
   security.polkit.enable = true;
 
   # Kernel Parameters
-
   boot.kernelParams = [
   "video=DP-7:e"
   ];
+
+  # Nix-ld to make the linker work for self compile binaries
+  programs.nix-ld = {
+  enable = true;
+  libraries = with pkgs; [
+    stdenv.cc.cc
+    zlib
+    openssl
+    icu
+    libunwind
+    libuuid
+    ];
+  };
+
 
   # EFI systemd bootloader
   boot.loader.systemd-boot.enable = true;
