@@ -29,8 +29,8 @@
 
     hardware.graphics = {
         enable = true;
-        driSupport = true;
-        driSupport32Bit = true;  # For 32-bit apps / Steam
+        #driSupport = true;
+        #driSupport32Bit = true;  # For 32-bit apps / Steam
     };
 
     hardware.nvidia = {
@@ -69,14 +69,16 @@
   boot.kernelParams = [
     "nvidia-drm.modeset=1"    # Required for Wayland
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"  # Better suspend support
+    "usbcore.autosuspend=-1"
   ];
 
   boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.initrd.kernelModules = [ "usbhid" "hid_generic" "ohci_pci" "ehci_pci" "xhci_pci" "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
 
-  # EFI systemd bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_750_EVO_500GB_S36SNWBH713688A";
+  boot.loader.grub.useOSProber = true;
+
 
 
   ## Enable flakes
@@ -113,7 +115,7 @@
   networking.nameservers = [ "1.1.1.1" ];
 
 
-  networking.firewall.enalbe = true;
+  networking.firewall.enable = true;
 
 
   # --- Air-Gap Specialisation ---
@@ -188,8 +190,8 @@
   brightnessctl   # Control screen brightness (Laptop)
   ];
 
-
-
+  services.openssh.enable = true;
+  
 
   programs.zsh.enable = true;
 

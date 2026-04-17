@@ -4,7 +4,7 @@
 
   imports = [
     ./waybar.nix
-    ./hyprlock.nix
+    #./hyprlock.nix
     ./hypridle.nix
   ];
 
@@ -36,26 +36,26 @@
     
     	# 1. Main Monitor (Samsung Ultrawide)
     	# Positioned at 0x0
-    	"DP-7, 3440x1440@99.98, 0x0, 1"
+    	#"DP-7, 3440x1440@99.98, 0x0, 1"
 
     	# 2. Laptop Monitor (BOE)
     	# Positioned at 3440x0 (to the right of the Ultrawide)
-    	"eDP-1, 1920x1200@60.00, 3440x0, 1"
+    	#"eDP-1, 1920x1200@60.00, 3440x0, 1"
 
 	];
 
 	workspace = [
 
-    	"1, monitor:DP-7"
-    	"2, monitor:DP-7"
-    	"3, monitor:DP-7"
-	    "4, monitor:DP-7"
-	    "5, monitor:DP-7"
-        "6, monitor:DP-7"
-        "7, monitor:DP-7"
-        "8, monitor:DP-7"
-        "9, monitor:DP-7"
-    	"10, monitor:eDP-1" # Keep workspace 10 on the laptop
+    	"1, monitor:DP-3"
+    	"2, monitor:DP-3"
+    	"3, monitor:DP-3"
+	    "4, monitor:DP-3"
+	    "5, monitor:DP-3"
+        "6, monitor:DP-3"
+        "7, monitor:DP-3"
+        "8, monitor:DP-3"
+        "9, monitor:DP-3"
+    	#"10, monitor:eDP-1" # Keep workspace 10 on the laptop
   	];
 
 
