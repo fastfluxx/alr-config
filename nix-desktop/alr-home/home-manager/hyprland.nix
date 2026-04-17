@@ -36,7 +36,7 @@
     
     	# 1. Main Monitor (Samsung Ultrawide)
     	# Positioned at 0x0
-    	"DP-7, 3440x1440@99.98, 0x0, 1"
+    	"DP-4, 3440x1440@99.98, 0x0, 1"
 
     	# 2. Laptop Monitor (BOE)
     	# Positioned at 3440x0 (to the right of the Ultrawide)
@@ -46,15 +46,15 @@
 
 	workspace = [
 
-    	"1, monitor:DP-7"
-    	"2, monitor:DP-7"
-    	"3, monitor:DP-7"
-	    "4, monitor:DP-7"
-	    "5, monitor:DP-7"
-        "6, monitor:DP-7"
-        "7, monitor:DP-7"
-        "8, monitor:DP-7"
-        "9, monitor:DP-7"
+    	"1, monitor:DP-4"
+    	"2, monitor:DP-4"
+    	"3, monitor:DP-4"
+	    "4, monitor:DP-4"
+	    "5, monitor:DP-4"
+        "6, monitor:DP-4"
+        "7, monitor:DP-4"
+        "8, monitor:DP-4"
+        "9, monitor:DP-4"
     	"10, monitor:eDP-1" # Keep workspace 10 on the laptop
   	];
 
@@ -144,7 +144,7 @@
   home.packages = with pkgs; [
     kitty # Kitty for backup
     wofi
-    swww
+    awww
     pavucontrol # Audio control
   ];
 
