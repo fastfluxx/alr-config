@@ -60,6 +60,8 @@
 	# Network Analyze
 	pkgs.tcpdump
 	pkgs.nmap
+    # Notes
+    pkgs.obsidian
 	# Video
 	pkgs.vlc
 	# Web Browser
@@ -160,6 +162,8 @@ programs.zsh = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
 	        vim="nvim";
+            nix-clean="sudo nix-collect-garbage --delete-older-than 15d && sudo nixos-rebuild boot --flake .#alr-work";
+
 
             # Toggle Air-Gap ON
             gap-on  = "sudo /run/current-system/specialisation/airgap/bin/switch-to-configuration test";

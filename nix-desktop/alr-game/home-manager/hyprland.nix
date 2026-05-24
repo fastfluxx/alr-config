@@ -144,7 +144,7 @@
   home.packages = with pkgs; [
     kitty # Kitty for backup
     wofi
-    swww
+    awww
     pavucontrol # Audio control
   ];
 
