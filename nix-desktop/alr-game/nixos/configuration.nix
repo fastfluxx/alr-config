@@ -29,17 +29,26 @@
 
     hardware.graphics = {
         enable = true;
-        driSupport = true;
-        driSupport32Bit = true;  # For 32-bit apps / Steam
+        #driSupport = true;
+        #driSupport32Bit = true;  # For 32-bit apps / Steam
     };
 
+
+
     hardware.nvidia = {
-        modesetting.enable = true;        # Required for Hyprland/Wayland
-        powerManagement.enable = false;   # Set true if you have sleep/suspend issues
-        open = false;                     # Use proprietary driver (better for GTX 1080)
-        nvidiaSettings = true;
-        package = config.boot.kernelPackages.nvidiaPackages.stable;
-    };
+        modesetting.enable = true;
+        open = false; # Absolutely keep this false; open kernel modules do not support Pascal!
+
+        # Manually construct the 580 legacy driver with explicit hashes
+        package = config.boot.kernelPackages.nvidiaPackages.production.overrideAttrs {
+            version = "580.95.05";
+            src = pkgs.fetchurl {
+                url = "https://us.download.nvidia.com/XFree86/Linux-x86_64/580.95.05/NVIDIA-Linux-x86_64-580.95.05.run";
+                sha256 = "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc=";
+            };
+        };
+};
+
 
     services.displayManager.sddm = {
         enable = true;
@@ -69,14 +78,16 @@
   boot.kernelParams = [
     "nvidia-drm.modeset=1"    # Required for Wayland
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"  # Better suspend support
+    "usbcore.autosuspend=-1"
   ];
 
   boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.initrd.kernelModules = [ "usbhid" "hid_generic" "ohci_pci" "ehci_pci" "xhci_pci" "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
 
-  # EFI systemd bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_750_EVO_500GB_S36SNWBH713688A";
+  boot.loader.grub.useOSProber = true;
+
 
 
   ## Enable flakes
@@ -113,7 +124,7 @@
   networking.nameservers = [ "1.1.1.1" ];
 
 
-  networking.firewall.enalbe = true;
+  networking.firewall.enable = true;
 
 
   # --- Air-Gap Specialisation ---
@@ -188,8 +199,8 @@
   brightnessctl   # Control screen brightness (Laptop)
   ];
 
-
-
+  services.openssh.enable = true;
+  
 
   programs.zsh.enable = true;
 

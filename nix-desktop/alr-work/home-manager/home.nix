@@ -123,6 +123,8 @@ systemd.user.services.my-blueman-applet = {
   programs.neovim = {
 
   enable = true;
+  withRuby = false;
+  withPython3 = false;
   defaultEditor = true;
 
   withRuby = false;

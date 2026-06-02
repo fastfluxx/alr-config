@@ -22,9 +22,6 @@
   	allowUnfree = true;
   };
 
-  home.sessionVariables = {
-	#DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet"; 
-  };
 
 
   # The home.packages option allows you to install Nix packages into your
@@ -63,6 +60,8 @@
 	# Network Analyze
 	pkgs.tcpdump
 	pkgs.nmap
+    # Notes
+    pkgs.obsidian
 	# Video
 	pkgs.vlc
 	# Web Browser
@@ -91,6 +90,8 @@
   programs.neovim = {
 
   enable = true;
+  withRuby = false;
+  withPython3 = false;
   defaultEditor = true;
 
 
@@ -161,6 +162,8 @@ programs.zsh = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
 	        vim="nvim";
+            nix-clean="sudo nix-collect-garbage --delete-older-than 15d && sudo nixos-rebuild boot --flake .#alr-work";
+
 
             # Toggle Air-Gap ON
             gap-on  = "sudo /run/current-system/specialisation/airgap/bin/switch-to-configuration test";
