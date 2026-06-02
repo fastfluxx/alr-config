@@ -30,6 +30,26 @@
 
   services.network-manager-applet.enable = true;
 
+services.blueman-applet.enable = false;
+
+systemd.user.services.my-blueman-applet = {
+  Unit = {
+    Description = "Blueman Bluetooth Agent";
+    After = [ "graphical-session-pre.target" ];
+    Partof = [ "graphical-session.target" ];
+  };
+
+  Service = {
+    ExecStart = "${pkgs.blueman}/bin/blueman-applet";
+    Restart = "on-failure";
+  };
+
+  Install = {
+    WantedBy = [ "graphical-session.target" ];
+  };
+};
+
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
@@ -105,6 +125,8 @@
   enable = true;
   defaultEditor = true;
 
+  withRuby = false;
+  withPython3 = false;
 
 
   initLua = ''
