@@ -199,7 +199,7 @@
   brightnessctl   # Control screen brightness (Laptop)
   ];
 
-  services.openssh.enable = true;
+  #services.openssh.enable = true;
   
 
   programs.zsh.enable = true;
