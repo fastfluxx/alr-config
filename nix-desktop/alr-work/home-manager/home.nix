@@ -160,7 +160,7 @@ systemd.user.services.my-blueman-applet = {
     
 
 
-	matchBlocks = {
+	settings = {
       	# Block 1: A general block for all hosts (*)
       	# You must define this if you set enableDefaultConfig = false
       	"*" = {
