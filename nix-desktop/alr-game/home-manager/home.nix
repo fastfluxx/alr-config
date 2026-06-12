@@ -56,7 +56,7 @@
 	# File transfer
 	pkgs.filezilla
 	# Password
-	pkgs.bitwarden-desktop
+	#pkgs.bitwarden-desktop
 	# Network Analyze
 	pkgs.tcpdump
 	pkgs.nmap
