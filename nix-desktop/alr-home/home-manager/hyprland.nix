@@ -4,7 +4,7 @@
 
   imports = [
     ./waybar.nix
-    ./hyprlock.nix
+    #./hyprlock.nix
     ./hypridle.nix
   ];
 

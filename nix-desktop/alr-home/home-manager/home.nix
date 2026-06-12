@@ -61,7 +61,7 @@
 	# File transfer
 	pkgs.filezilla
 	# Password
-	pkgs.bitwarden-desktop
+	#pkgs.bitwarden-desktop
 	# Network Analyze
 	pkgs.wireshark
 	pkgs.tcpdump
@@ -75,6 +75,7 @@
     pkgs.ungoogled-chromium
     # Version control
     pkgs.git
+    pkgs.openssl
 	# IDE
 	pkgs.jetbrains.rider
 	## Rider stuff

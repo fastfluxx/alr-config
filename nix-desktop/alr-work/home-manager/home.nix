@@ -84,7 +84,7 @@ systemd.user.services.my-blueman-applet = {
 	# File transfer
 	pkgs.filezilla
 	# Password
-	pkgs.bitwarden-desktop
+	#pkgs.bitwarden-desktop
 	# Network Analyze
 	pkgs.wireshark
 	pkgs.tcpdump
@@ -96,6 +96,9 @@ systemd.user.services.my-blueman-applet = {
 	# Web Browser
 	pkgs.firefox
     pkgs.ungoogled-chromium
+    # SSH
+    pkgs.openssl
+    pkgs.ssh-tools
     # Version control
     pkgs.git
 	# IDE
@@ -111,7 +114,8 @@ systemd.user.services.my-blueman-applet = {
     ])
 	# Android
 	pkgs.android-tools
-
+    # AI Code
+    pkgs.claude-code
   ];
 
 
@@ -127,8 +131,6 @@ systemd.user.services.my-blueman-applet = {
   withPython3 = false;
   defaultEditor = true;
 
-  withRuby = false;
-  withPython3 = false;
 
 
   initLua = ''
@@ -158,7 +160,7 @@ systemd.user.services.my-blueman-applet = {
     
 
 
-	matchBlocks = {
+	settings = {
       	# Block 1: A general block for all hosts (*)
       	# You must define this if you set enableDefaultConfig = false
       	"*" = {
@@ -177,31 +179,31 @@ systemd.user.services.my-blueman-applet = {
       	};
 
 
-	"sg220" = {
-      		hostname = "10.0.1.42";
-      		user = "cisco";
+ #	"sg220" = {
+ #     		hostname = "10.0.1.42";
+ #     		user = "cisco";
+ #
+ #		extraOptions = {
+ #       		"KexAlgorithms" = "+diffie-hellman-group1-sha1";
+ #       		"HostKeyAlgorithms" = "+ssh-rsa";
+ #       		"Ciphers" = "aes128-cbc,aes128-ctr,aes192-ctr,aes256-ctr";
+ #     		};
+ #
+ #};
 
-		extraOptions = {
-        		"KexAlgorithms" = "+diffie-hellman-group1-sha1";
-        		"HostKeyAlgorithms" = "+ssh-rsa";
-        		"Ciphers" = "aes128-cbc,aes128-ctr,aes192-ctr,aes256-ctr";
-      		};
-
-	};
 
 
+    #	"sg300" = {
+      #		hostname = "10.0.1.41";
+      #		user = "cisco";
 
-    	"sg300" = {
-      		hostname = "10.0.1.41";
-      		user = "cisco";
+	 #	extraOptions = {
+     #   		"KexAlgorithms" = "+diffie-hellman-group1-sha1";
+     #   		"HostKeyAlgorithms" = "+ssh-rsa";
+     #   		"Ciphers" = "aes128-cbc,aes128-ctr,aes192-ctr,aes256-ctr";
+     # 		};
 
-		extraOptions = {
-        		"KexAlgorithms" = "+diffie-hellman-group1-sha1";
-        		"HostKeyAlgorithms" = "+ssh-rsa";
-        		"Ciphers" = "aes128-cbc,aes128-ctr,aes192-ctr,aes256-ctr";
-      		};
-
-	};
+	#};
 
 
 	};

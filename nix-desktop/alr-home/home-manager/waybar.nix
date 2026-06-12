@@ -23,7 +23,7 @@
 
         modules-left = [ "hyprland/workspaces" "hyprland/submap" ];
         modules-center = [ "clock" "hyprland/window" ];
-        modules-right = [ "pulseaudio" "bluetooth" "network" "cpu" "memory" "battery" "tray" ];
+        modules-right = [ "tray" "pulseaudio" "bluetooth" "network" "cpu" "memory" "battery" ];
 
         "hyprland/workspaces" = {
           on-click = "activate";
