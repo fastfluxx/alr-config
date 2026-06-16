@@ -75,12 +75,6 @@
 
 
 
-  # COSMIC GDM
-
-  ## COSMIC Login manager
-  #services.displayManager.cosmic-greeter.enable = true;
-  ## COSMIC GDM
-  #services.desktopManager.cosmic.enable = true;
 
   # Gnome Failover
   #services.displayManager.gdm.enable = true;
@@ -119,11 +113,7 @@
   };
 
 
-  services.syncthing = {
-  enable = true;
-  dataDir = "/home/alr/syncthing";
-  user = "alr";
-  };
+
 
 
   # Enable virtualization (KVM/QEMU)
@@ -165,6 +155,15 @@
   ];
 
 
+
+  # Enable the background daemon and open the necessary ports
+  #services.unifi = {
+  #  enable = true;
+  #  openFirewall = true;
+
+  #  unifiPackage = pkgs.unifi;
+  #  mongodbPackage = pkgs.mongodb-7_0;
+  #};
 
 
   programs.zsh.enable = true;

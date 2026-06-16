@@ -16,8 +16,6 @@
         #dedicatedServer.openFirewall = true; # Optional
     };
 
-    # Crucial for DirectX and Vulkan translation
-    hardware.graphics.enable32Bit = true;
 
     programs.hyprland = {
         enable = true;
@@ -29,6 +27,7 @@
 
     hardware.graphics = {
         enable = true;
+        enable32Bit = true;
         #driSupport = true;
         #driSupport32Bit = true;  # For 32-bit apps / Steam
     };
@@ -78,7 +77,9 @@
   boot.kernelParams = [
     "nvidia-drm.modeset=1"    # Required for Wayland
     "nvidia.NVreg_PreserveVideoMemoryAllocations=1"  # Better suspend support
+    "nvidia.NVreg_UsePageAttributeTable=1"
     "usbcore.autosuspend=-1"
+    "split_lock_detect=warn"
   ];
 
   boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
@@ -105,6 +106,7 @@
         GBM_BACKEND = "nvidia-drm";
         __GLX_VENDOR_LIBRARY_NAME = "nvidia";
         WLR_NO_HARDWARE_CURSORS = "1";  # Fixes invisible cursor on Nvidia
+        HYPRLAND_NO_HARDWARE_CURSORS = "1";
         NIXOS_OZONE_WL = "1";
     };
 
@@ -194,13 +196,22 @@
   environment.systemPackages = with pkgs; [
   git
   vim
-  pulseaudio      # For audio control
   networkmanagerapplet # Wi-Fi tray icon
   brightnessctl   # Control screen brightness (Laptop)
   ];
 
   #services.openssh.enable = true;
-  
+
+  # Enable the background daemon and open the necessary ports
+  services.unifi = {
+    enable = true;
+  #  openFirewall = true;
+
+    unifiPackage = pkgs.unifi;
+    mongodbPackage = pkgs.mongodb-7_0;
+  };
+
+
 
   programs.zsh.enable = true;
 
