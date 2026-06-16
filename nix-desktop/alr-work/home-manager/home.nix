@@ -116,6 +116,7 @@ systemd.user.services.my-blueman-applet = {
 	pkgs.android-tools
     # AI Code
     pkgs.claude-code
+    pkgs.aider-chat
   ];
 
 

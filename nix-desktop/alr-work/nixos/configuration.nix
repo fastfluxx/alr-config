@@ -28,6 +28,20 @@
         wayland.enable = true;
     };
 
+    boot.initrd = {
+    systemd.enable = true;          # Switches NixOS to modern systemd stage-1 boot
+    luks.fido2Support = false;      # Must be false! Systemd handles this natively now
+
+    luks.devices = {
+      "crypted" = {
+        device = "/dev/disk/by-uuid/949ff513-958e-410c-afdb-3d3b25347d70";
+        crypttabExtraOpts = [ "fido2-device=auto" ];
+      };
+    };
+
+
+    };
+
 
     # Add PipeWire for audio
     security.rtkit.enable = true;
