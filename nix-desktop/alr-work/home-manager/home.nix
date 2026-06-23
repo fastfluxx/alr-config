@@ -162,20 +162,21 @@ systemd.user.services.my-blueman-applet = {
 
 
 	settings = {
-      	# Block 1: A general block for all hosts (*)
-      	# You must define this if you set enableDefaultConfig = false
-      	"*" = {
-        # Common options for all connections
-        # The value must be a string, or true/false for boolean options.
-        user = config.home.username; # Default user for all hosts
-        serverAliveInterval = 60;
-      	};
+      	
 
+        "*" = {
+            user = config.home.username; # Default user for all hosts
+            identityFile = "~/.ssh/alr.priv";
+            identitiesOnly = true;
+            serverAliveInterval = 60;
+        };
+
+        
       # Block 2: Specific configuration for a remote server
       	"github.com" = {
         	hostname = "github.com";
         	user = "git";
-        	identityFile = [ "~/.ssh/alr.laud" ]; # Specific key for GitHub
+        	identityFile = [ "~/.ssh/id_ed25519_sk" "~/.ssh/id_ed25519_sk_02" "~/.ssh/alr.laud" ]; # Specific key for GitHub
         	identitiesOnly = true; # Only use the key specified above
       	};
 

@@ -11,6 +11,8 @@
 
   home.file."wallpapers/Fantasy-Autumn.png".source = ../../wallpaper/Fantasy-Autumn.png;
 
+
+
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -28,23 +30,29 @@
         "XDG_SESSION_TYPE,wayland"
       ];
 
-    bindl = [
-      ", switch:on:Lid Switch, exec, hyprctl keyword monitor \"eDP-1, disable\""
-      ", switch:off:Lid Switch, exec, hyprctl keyword monitor \"eDP-1, preferred, auto, 1\""
-    ];
+        # 1. Lid Switch Actions (Formatted correctly for Nix)
+      bindl = [
+        ", switch:on:Lid Switch, exec, hyprctl keyword monitor \"eDP-1, disable\""
+        ", switch:off:Lid Switch, exec, hyprctl keyword monitor \"eDP-1, 1920x1200@60.00, 3440x0, 1\""
+      ];
+
 
 
 	monitor = [
 
-	# name, resolution@refresh, position, scale
-    
-    	# 1. Main Monitor (Samsung Ultrawide)
-    	# Positioned at 0x0
-    	"DP-7, 3440x1440@99.98, 0x0, 1"
+        # name, resolution@refresh, position, scale
+        
+        # 1. Main Monitor (Samsung Ultrawide)
+        # Positioned at 0x0
+        "DP-7, 3440x1440@99.98, 0x0, 1"
 
-    	# 2. Laptop Monitor (BOE)
-    	# Positioned at 3440x0 (to the right of the Ultrawide)
-    	"eDP-1, 1920x1200@60.00, 3440x0, 1"
+        # 2. New Side Monitor (BenQ)
+        # Positioned at 3440x0 (directly to the right of the Ultrawide)
+        "DP-5, 1920x1080@60.00, 3440x0, 1"
+
+        # 3. Laptop Monitor (BOE)
+        # Disabled because the lid is closed
+        "eDP-1, disable"
 
 	];
 
@@ -58,7 +66,7 @@
         "6, monitor:DP-7"
         "7, monitor:DP-7"
         "8, monitor:DP-7"
-        "9, monitor:DP-7"
+        "9, monitor:DP-5"
     	"10, monitor:eDP-1" # Keep workspace 10 on the laptop
   	];
 
