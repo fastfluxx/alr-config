@@ -136,6 +136,8 @@
 
   networking.nameservers = [ "1.1.1.1" ];
 
+  networking.firewall.allowedUDPPorts = [ 5514 ];
+
 
   # Enable bluetooth
   hardware.bluetooth.enable = true;
@@ -154,11 +156,11 @@
   };
 
 
-  services.syncthing = {
-  enable = true;
-  dataDir = "/home/alr/syncthing";
-  user = "alr";
-  };
+  #services.syncthing = {
+  #enable = true;
+  #dataDir = "/home/alr/syncthing";
+  #user = "alr";
+  #};
 
 
   # Enable virtualization (KVM/QEMU)
