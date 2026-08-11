@@ -4,6 +4,7 @@
 
   imports = [
     ./hyprland.nix
+    ../../common/home-manager/ssh.nix
   ];
   # Home config
   home.username = "alr";
@@ -103,31 +104,7 @@
   };
 
 
-  programs.ssh = {
-    enable = true;
-
-    enableDefaultConfig = false;
-
-    matchBlocks = {
-      # Block 1: A general block for all hosts (*)
-      # You must define this if you set enableDefaultConfig = false
-      "*" = {
-        # Common options for all connections
-        user = config.home.username; # Default user for all hosts
-        serverAliveInterval = 60;
-      };
-
-      # Block 2: Specific configuration for a remote server
-      "github.com" = {
-        hostname = "github.com";
-        user = "git";
-        identityFile = [ "~/.ssh/alr.priv" ]; # Specific key for GitHub
-        identitiesOnly = true; # Only use the key specified above
-      };
-    };
-  };
-
-  programs.zsh = {
+programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
