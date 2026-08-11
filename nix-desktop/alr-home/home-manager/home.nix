@@ -18,10 +18,6 @@
   # release notes.
   home.stateVersion = "24.05"; # Please read the comment before changing.
 
-  nixpkgs.config = {
-  	allowUnfree = true;
-  };
-
   home.sessionVariables = {
 	DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet"; 
   };

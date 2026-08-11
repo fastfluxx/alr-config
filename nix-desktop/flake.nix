@@ -2,7 +2,7 @@
   description = "Flake config for alr desktop";
 
   inputs = {
-    
+
     #nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
@@ -18,64 +18,62 @@
   outputs = { self, nixpkgs, home-manager, hyprland, ... } @ inputs:
   let
     system = "x86_64-linux";
-    
-    # Common arguments passed to all configurations
-    sharedArgs = { inherit inputs; };
+    pkgs = nixpkgs.legacyPackages.${system};
+
+    # Attribute names match networking.hostName so that a bare
+    # `nixos-rebuild switch --flake .` resolves on each machine.
+    hosts = {
+      alr-workstation = ./alr-work;
+      alr-home = ./alr-home;
+      alr-game = ./alr-game;
+    };
+
+    # home-manager runs as a NixOS module, so one `nixos-rebuild switch`
+    # applies both the system and the user config, and both roll back together.
+    mkHost = dir: nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = { inherit inputs; };
+      modules = [
+        (dir + "/nixos/configuration.nix")
+        (dir + "/nixos/hardware-configuration.nix")
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = { inherit inputs; };
+            users.alr = import (dir + "/home-manager/home.nix");
+          };
+        }
+      ];
+    };
+
+    # Hyprland 0.56 silently falls back to a generated default config when it
+    # cannot parse the one it is given, so a broken config looks like a normal
+    # login. Parse it at build time instead.
+    mkHyprlandCheck = name: host:
+      pkgs.runCommand "hyprland-config-${name}" { } ''
+        export HOME="$PWD" XDG_RUNTIME_DIR="$PWD"
+        cp ${host.config.home-manager.users.alr.home-files}/.config/hypr/hyprland.lua ./hyprland.lua
+
+        result=$(${host.config.programs.hyprland.package}/bin/Hyprland \
+          --verify-config -c ./hyprland.lua 2>&1 || true)
+        echo "$result"
+
+        if ! echo "$result" | grep -q 'config ok'; then
+          echo "Hyprland rejected the generated config for ${name}" >&2
+          exit 1
+        fi
+        touch "$out"
+      '';
   in {
-    
-    # NixOS system config
-    nixosConfigurations = {
-      alr-home = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs; };
-        modules = [ 
-		./alr-home/nixos/configuration.nix 
-		./alr-home/nixos/hardware-configuration.nix
-		 ];
-      };
 
-    alr-game = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs; };
-        modules = [ 
-		./alr-game/nixos/configuration.nix 
-		./alr-game/nixos/hardware-configuration.nix
-		 ];
-      };
+    nixosConfigurations = builtins.mapAttrs (_: mkHost) hosts;
 
-
-      alr-work = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs; };
-        modules = [ 
-		./alr-work/nixos/configuration.nix 
-		./alr-work/nixos/hardware-configuration.nix 
-		];
-      };
-
-    };
-
-    # Home manager config
-    homeConfigurations = {
-      "alr-home" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = { inherit inputs; };
-        modules = [ ./alr-home/home-manager/home.nix ];
-      };
-
-      "alr-game" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = { inherit inputs; };
-        modules = [ ./alr-game/home-manager/home.nix ];
-      };
-
-      "alr-work" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = { inherit inputs; };
-        modules = [ ./alr-work/home-manager/home.nix ];
-      };
-
-    };
+    checks.${system} =
+      nixpkgs.lib.mapAttrs' (name: host:
+        nixpkgs.lib.nameValuePair "hyprland-config-${name}" (mkHyprlandCheck name host)
+      ) self.nixosConfigurations;
 
   };
 }

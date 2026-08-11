@@ -1,11 +1,21 @@
-{ pkgs, ... }:
+# Lock screen. Needs security.pam.services.hyprlock on the NixOS side.
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.local.hyprlock;
+in
 {
-  # 1. Essential: Enable the PAM service so you can actually log back in
-  # This part usually goes in your system-level configuration
+  options.local.hyprlock = {
+    enable = lib.mkEnableOption "the shared hyprlock configuration";
 
-  # 2. The Configuration
-  programs.hyprlock = {
+    background = lib.mkOption {
+      type = lib.types.str;
+      default = "/home/alr/Pictures/Laud/LM-Backgrop.png";
+      description = "Image shown behind the lock screen.";
+    };
+  };
+
+  config.programs.hyprlock = lib.mkIf cfg.enable {
     enable = true;
     settings = {
       general = {
@@ -16,7 +26,7 @@
 
       background = [{
         monitor = ""; # Empty means all monitors
-        path = "/home/alr/Pictures/Laud/LM-Backgrop.png";
+        path = cfg.background;
         blur_passes = 1;
         color = "rgba(25, 20, 20, 1.0)";
       }];
