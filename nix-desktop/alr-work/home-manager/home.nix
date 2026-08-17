@@ -224,7 +224,7 @@ programs.zsh = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
 	        vim="nvim";
-            nix-clean="sudo nix-collect-garbage --delete-older-than 15d && sudo nixos-rebuild boot --flake .#alr-work";
+            nix-clean="sudo nix-collect-garbage --delete-older-than 15d";
         };
 
 
