@@ -10,6 +10,11 @@
 let
   cfg = config.local.sddmTheme;
 
+  # The greeter binary SDDM will reach for, resolved the way SDDM resolves it:
+  # QtVersion in metadata.desktop, defaulting to 5, where 5 means a bare
+  # `sddm-greeter` and anything else appends `-qt<n>`.
+  sddmPackage = config.services.displayManager.sddm.package;
+
   theme = pkgs.runCommand "sddm-theme-hyprlock"
     {
       nativeBuildInputs = [ pkgs.imagemagick pkgs.qt6.qtdeclarative ];
@@ -20,6 +25,24 @@ let
       # qmllint fails on syntax errors and only warns about the context
       # properties SDDM injects (sddm, userModel, sessionModel).
       qmllint ${./sddm-hyprlock/Main.qml}
+
+      # A theme whose QtVersion names a greeter that was never built does not
+      # fail anything -- SDDM logs one line and quietly serves the stock
+      # fallback theme, which is indistinguishable from the theme never having
+      # been applied at all. nixpkgs builds only the qt6 greeter, so pin the
+      # two together here where a mismatch is a build error.
+      qtVersion=$(sed -n 's/^QtVersion=//p' ${./sddm-hyprlock/metadata.desktop})
+      case "''${qtVersion:-5}" in
+        5) greeter=${sddmPackage}/bin/sddm-greeter ;;
+        *) greeter=${sddmPackage}/bin/sddm-greeter-qt''${qtVersion} ;;
+      esac
+      if [ ! -x "$greeter" ]; then
+        echo "metadata.desktop QtVersion=''${qtVersion:-5 (default)} selects $greeter," >&2
+        echo "which ${sddmPackage} does not provide. The greeter would fall back" >&2
+        echo "to the stock theme. Available:" >&2
+        ls ${sddmPackage}/bin >&2
+        exit 1
+      fi
 
       dir="$out/share/sddm/themes/hyprlock"
       mkdir -p "$dir"

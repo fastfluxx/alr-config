@@ -26,9 +26,12 @@
       # 1. Main Monitor (Samsung Ultrawide)
       { output = "DP-4"; mode = "3440x1440@99.98"; position = "0x0"; scale = 1; }
 
-      # 2. Laptop Monitor (BOE), to the right of the Ultrawide
+      # 2. Laptop Monitor (BOE), to the right of the Ultrawide. lidOutput
+      #    below disables and restores it as the lid closes and opens.
       { output = "eDP-1"; mode = "1920x1200@60.00"; position = "3440x0"; scale = 1; }
     ];
+
+    lidOutput = "eDP-1";
 
     workspaceMonitors =
       lib.genAttrs (map toString (lib.range 1 9)) (_: "DP-4")

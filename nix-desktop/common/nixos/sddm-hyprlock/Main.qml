@@ -105,6 +105,60 @@ Item {
         }
     }
 
+    // hyprlock has no power controls -- it unlocks a session that is already
+    // running. A greeter does need them, so they sit out of the way in the
+    // corner and stay dim until pointed at. Glyphs are Nerd Font PUA points,
+    // which the clock's font already covers.
+    component PowerButton: Text {
+        id: button
+
+        signal activated()
+
+        font.family: "JetBrainsMono Nerd Font"
+        font.pixelSize: 26
+        color: "#c8c8c8"
+
+        opacity: hover.hovered ? 1.0 : 0.4
+        Behavior on opacity {
+            NumberAnimation { duration: 120 }
+        }
+
+        HoverHandler {
+            id: hover
+            cursorShape: Qt.PointingHandCursor
+        }
+
+        TapHandler {
+            onTapped: button.activated()
+        }
+    }
+
+    Row {
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 40
+        anchors.bottomMargin: 32
+        spacing: 28
+
+        PowerButton {
+            text: "\uf186"                  // moon
+            visible: sddm.canSuspend
+            onActivated: sddm.suspend()
+        }
+
+        PowerButton {
+            text: "\uf021"                  // arrows in a circle
+            visible: sddm.canReboot
+            onActivated: sddm.reboot()
+        }
+
+        PowerButton {
+            text: "\uf011"                  // power symbol
+            visible: sddm.canPowerOff
+            onActivated: sddm.powerOff()
+        }
+    }
+
     function tryLogin() {
         if (password.text.length === 0)
             return;

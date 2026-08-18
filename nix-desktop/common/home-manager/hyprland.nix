@@ -24,6 +24,29 @@ let
     (bind "${mod} + SHIFT + ${toString i}" "hl.dsp.window.move({ workspace = ${toString i} })")
   ]) (lib.range 1 9);
 
+  # Lid handling. Hyprland 0.56 dropped hyprlang and with it `hyprctl keyword`,
+  # so the monitor is driven through hl.monitor() over `hyprctl eval`. That call
+  # merges into the existing rule rather than replacing it, which is why
+  # `disabled` is set explicitly in both directions -- omitting it on the way
+  # back up would leave the panel switched off.
+  lidMonitor = lib.findFirst (m: (m.output or "") == cfg.lidOutput) null cfg.monitors;
+
+  lidBinds = lib.optionals (lidMonitor != null) (
+    let
+      output = str cfg.lidOutput;
+      mode = str (lidMonitor.mode or "preferred");
+      position = str (lidMonitor.position or "auto");
+      scale = toString (lidMonitor.scale or 1);
+    in
+    [
+      (bindOpts "switch:on:Lid Switch"
+        (exec "hyprctl eval 'hl.monitor({ output = ${output}, disabled = true })'")
+        "{ locked = true }")
+      (bindOpts "switch:off:Lid Switch"
+        (exec "hyprctl eval 'hl.monitor({ output = ${output}, mode = ${mode}, position = ${position}, scale = ${scale}, disabled = false })'")
+        "{ locked = true }")
+    ]);
+
   # Hyprland 0.56 has no exec-once; the equivalent is a hyprland.start handler.
   # home-manager emits its own handler for systemd activation, so nothing here
   # needs to repeat dbus-update-activation-environment.
@@ -62,6 +85,18 @@ in
       description = "Workspace number to monitor output, rendered as hl.workspace_rule().";
     };
 
+    lidOutput = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "eDP-1";
+      description = ''
+        Internal panel to switch off while the lid is shut, and back on when it
+        opens. Its mode, position and scale come from the matching `monitors`
+        entry, so a monitor moved in the layout cannot drift out of step with
+        the lid binds.
+      '';
+    };
+
     startupCommands = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -82,6 +117,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    assertions = [{
+      assertion = cfg.lidOutput == null || lidMonitor != null;
+      message = "local.hyprland.lidOutput is ${toString cfg.lidOutput}, which is not one of the configured monitors.";
+    }];
 
     home.file = lib.mkIf (cfg.wallpaper != null) {
       ${wallpaperTarget}.source = cfg.wallpaper;
@@ -186,7 +226,8 @@ in
           (bind "${mod} + L" (exec "hyprlock"))
         ++ directionBinds
         ++ workspaceBinds
-        ++ cfg.extraBinds;
+        ++ cfg.extraBinds
+        ++ lidBinds;
 
       };
     };

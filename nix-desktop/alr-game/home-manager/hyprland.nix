@@ -31,7 +31,10 @@
       # { output = "eDP-1"; mode = "1920x1200@60.00"; position = "3440x0"; scale = 1; }
     ];
 
-    workspaceMonitors = lib.genAttrs (map toString (lib.range 1 9)) (_: "DP-3");
+    # No workspace pinning while `monitors` is the catch-all above: the rules
+    # used to name DP-3, which is not a connector this host configures. Set both
+    # together once the real connector name is known.
+    workspaceMonitors = { };
   };
 
   # Packages needed for this specific desktop

@@ -1,5 +1,14 @@
 { config, pkgs, ... }:
 
+let
+  # DOTNET_ROOT and the `dotnet` on PATH have to be the same tree: pointing the
+  # variable at a standalone dotnet-sdk_10 hid the 9 SDK from `dotnet --list-sdks`
+  # (and was a different patch version of 10 besides).
+  dotnet = pkgs.dotnetCorePackages.combinePackages [
+    pkgs.dotnetCorePackages.dotnet_9.sdk
+    pkgs.dotnetCorePackages.dotnet_10.sdk
+  ];
+in
 {
 
   imports = [
@@ -19,31 +28,17 @@
   home.stateVersion = "24.05"; # Please read the comment before changing.
 
   home.sessionVariables = {
-	DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet";
+	DOTNET_ROOT = "${dotnet}/share/dotnet";
     EDITOR = "nvim";
   };
 
 
   services.network-manager-applet.enable = true;
 
-services.blueman-applet.enable = false;
-
-systemd.user.services.my-blueman-applet = {
-  Unit = {
-    Description = "Blueman Bluetooth Agent";
-    After = [ "graphical-session-pre.target" ];
-    Partof = [ "graphical-session.target" ];
-  };
-
-  Service = {
-    ExecStart = "${pkgs.blueman}/bin/blueman-applet";
-    Restart = "on-failure";
-  };
-
-  Install = {
-    WantedBy = [ "graphical-session.target" ];
-  };
-};
+  # The applet used to be a hand-written unit here, which set `Partof` instead
+  # of `PartOf`; systemd ignored the typo'd key, so it was never stopped with
+  # the session. The home-manager service does the same job correctly.
+  services.blueman-applet.enable = true;
 
 
   # The home.packages option allows you to install Nix packages into your
@@ -102,12 +97,7 @@ systemd.user.services.my-blueman-applet = {
 	## Rider stuff
 	pkgs.dotnet-ef
 	pkgs.jetbrains.jdk
-	#pkgs.dotnetCorePackages.dotnet_9.sdk
-	#pkgs.dotnetCorePackages.dotnet_10.sdk
-    (pkgs.dotnetCorePackages.combinePackages [
-    pkgs.dotnetCorePackages.dotnet_9.sdk
-    pkgs.dotnetCorePackages.dotnet_10.sdk
-    ])
+	dotnet
 	# Android
 	pkgs.android-tools
     # AI Code
@@ -234,16 +224,7 @@ programs.zsh = {
 
         initContent = 
         "
-          # Check if zsh-autosuggestions script is not downloaded
-          if [[ ! -f ~/.zsh/zsh-autosuggestions.zsh ]]; then
-          # Download zsh-autosuggestions script
-          mkdir -p ~/.zsh
-          curl -o ~/.zsh/zsh-autosuggestions.zsh https://raw.githubusercontent.com/zsh-users/zsh-autosuggestions/master/zsh-autosuggestions.zsh
-          fi
- 
-        # Source zsh-autosuggestions script
-        source ~/.zsh/zsh-autosuggestions.zsh
- 
+        # autosuggestion.enable above already sources the plugin from the store.
  
         # The following lines were added by compinstall
         zstyle :compinstall filename '~/.zshrc'

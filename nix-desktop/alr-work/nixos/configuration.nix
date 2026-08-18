@@ -5,6 +5,8 @@
   imports =
     [
       ./hosts.nix
+      ../../common/nixos/sddm-greeter.nix
+      ../../common/nixos/sddm-hyprlock.nix
     ];
 
     programs.hyprland = {
@@ -21,6 +23,23 @@
             intel-vaapi-driver
             libvdpau-va-gl
         ];
+    };
+
+    # Greeter styled after the lock screen; see common/nixos/sddm-hyprlock.nix.
+    local.sddmTheme.enable = true;
+
+    # The theme has no session picker, so name the session rather than leaving
+    # it to whatever SDDM happens to have recorded. Note that a remembered
+    # session in /var/lib/sddm/state.conf still takes precedence over this --
+    # it only decides what runs when there is nothing remembered.
+    services.displayManager.defaultSession = "hyprland";
+
+    # The laptop panel reads as connected even with the lid shut, so keep the
+    # greeter on the ultrawide; see common/nixos/sddm-greeter.nix.
+    local.sddmGreeter = {
+        enable = true;
+        primaryOutput = "DP-7";
+        otherOutputs = [ "eDP-1" "DP-5" ];
     };
 
     services.displayManager.sddm = {

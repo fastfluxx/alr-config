@@ -1,9 +1,5 @@
 { lib, ... }:
 
-let
-  hypr = import ../../common/lib/hypr.nix { inherit lib; };
-  inherit (hypr) bindOpts exec;
-in
 {
 
   imports = [
@@ -28,9 +24,12 @@ in
       # 2. New Side Monitor (BenQ), directly to the right of the Ultrawide
       { output = "DP-5"; mode = "1920x1080@60.00"; position = "3440x0"; scale = 1; }
 
-      # 3. Laptop Monitor (BOE), disabled because the lid is closed
-      { output = "eDP-1"; disabled = true; }
+      # 3. Laptop Monitor (BOE), to the right of the BenQ. lidOutput below
+      #    disables and restores it as the lid closes and opens.
+      { output = "eDP-1"; mode = "1920x1200@60.00"; position = "5360x0"; scale = 1; }
     ];
+
+    lidOutput = "eDP-1";
 
     workspaceMonitors =
       lib.genAttrs (map toString (lib.range 1 8)) (_: "DP-7")
@@ -38,16 +37,6 @@ in
         "9" = "DP-5";
         "10" = "eDP-1"; # Keep workspace 10 on the laptop
       };
-
-    extraBinds = [
-      # Lid Switch Actions (was `bindl`, hence locked = true)
-      (bindOpts "switch:on:Lid Switch"
-        (exec ''hyprctl keyword monitor "eDP-1, disable"'')
-        "{ locked = true }")
-      (bindOpts "switch:off:Lid Switch"
-        (exec ''hyprctl keyword monitor "eDP-1, 1920x1200@60.00, 3440x0, 1"'')
-        "{ locked = true }")
-    ];
   };
 
 }

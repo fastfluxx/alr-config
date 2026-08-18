@@ -105,8 +105,9 @@
         XDG_SESSION_TYPE = "wayland";
         GBM_BACKEND = "nvidia-drm";
         __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-        WLR_NO_HARDWARE_CURSORS = "1";  # Fixes invisible cursor on Nvidia
-        HYPRLAND_NO_HARDWARE_CURSORS = "1";
+        # WLR_NO_HARDWARE_CURSORS / HYPRLAND_NO_HARDWARE_CURSORS were dropped:
+        # neither string appears in the Hyprland 0.56 binary. If the cursor goes
+        # missing on Nvidia again, it is a cursor setting in hl.config() now.
         NIXOS_OZONE_WL = "1";
     };
 
