@@ -1,0 +1,10 @@
+[SddmGreeterTheme]
+Name=hyprlock
+Description=SDDM greeter matching the hyprlock lock screen
+Type=sddm-theme
+Version=1.0
+Author=alr
+License=MIT
+MainScript=Main.qml
+Theme-Id=hyprlock
+Theme-API=2.0
