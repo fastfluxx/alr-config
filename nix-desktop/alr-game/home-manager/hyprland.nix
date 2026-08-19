@@ -9,12 +9,14 @@
     ../../common/home-manager/hypridle.nix
     ../../common/home-manager/ghostty.nix
     ../../common/home-manager/screenshot.nix
+    ../../common/home-manager/mako.nix
   ];
 
   # No lock screen on this host.
   local.hyprlock.enable = false;
 
   local.screenshot.enable = true;
+  local.mako.enable = true;
 
   local.hypridle = {
     enable = true;

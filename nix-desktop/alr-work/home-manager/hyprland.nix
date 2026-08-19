@@ -9,11 +9,13 @@
     ../../common/home-manager/hypridle.nix
     ../../common/home-manager/ghostty.nix
     ../../common/home-manager/screenshot.nix
+    ../../common/home-manager/mako.nix
   ];
 
   local.hyprlock.enable = true;
   local.hypridle.enable = true;
   local.screenshot.enable = true;
+  local.mako.enable = true;
 
   local.hyprland = {
     enable = true;

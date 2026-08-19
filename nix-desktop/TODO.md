@@ -51,12 +51,6 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
   `~/.gitconfig` value; with only the XDG one it returns that. Delete or rename
   `~/.gitconfig` after switching, on all three machines.
 
-- [ ] **No notification daemon on any host** — nothing owns
-  `org.freedesktop.Notifications`, so `notify-send` fails with
-  `ServiceUnknown`. The screenshot tool's "Screenshot saved" confirmation is
-  written to be silent and non-fatal because of it; installing mako or dunst
-  turns it on with no change to the script.
-
 ## Open questions
 
 - [ ] alr-home has `local.hyprlock.enable = false`, so it has a login screen

@@ -98,10 +98,10 @@ let
 
       wl-copy --type image/png < "$target"
 
-      # Best effort, and silent: no notification daemon is configured on these
-      # hosts, so notify-send fails with ServiceUnknown. That must neither fail
-      # nor report on a capture already written and copied. Installing mako or
-      # dunst is all this needs to start showing confirmations.
+      # Best effort, and silent. mako now owns org.freedesktop.Notifications
+      # (common/home-manager/mako.nix), so this normally shows -- but a capture
+      # that is already written and copied must not fail or report just because
+      # the daemon is down.
       notify-send --app-name=screenshot --icon="$target" \
         "Screenshot saved" "$target" 2>/dev/null || true
     '';
