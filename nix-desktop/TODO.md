@@ -36,9 +36,6 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
 
 ## Duplication and drift
 
-- [ ] **`home.nix` is triplicated** — 46 / 39 / 33 package entries with heavy
-  overlap, plus the duplicated zsh block below.
-
 - [ ] **The ssh migration only half-landed** — `common/home-manager/ssh.nix` is
   imported by alr-home and alr-game, but alr-work keeps an inline `programs.ssh`
   at `home-manager/home.nix:143`. They differ in substance: alr-work uses three
@@ -58,10 +55,18 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
 
 ## Minor
 
-- [ ] **oh-my-zsh's `agnoster` theme is inert** — set at
-  `alr-home/home-manager/home.nix:138`, `alr-work:209` and `alr-game:114`, but
-  each file also exports `PS1` by hand further down (`:169`, `:239`, `:135`).
-  The manual one wins, so the theme setting does nothing. Pick one.
+- [ ] **oh-my-zsh's `agnoster` theme is inert** — now in one place,
+  `common/home-manager/base.nix`, where `oh-my-zsh.theme` is set and
+  `initContent` exports `PS1` by hand a few lines below. The manual prompt
+  wins, so the theme setting does nothing. Pick one.
+
+- [ ] **No zsh syntax highlighting on alr-work or alr-home** — only alr-game
+  sets `programs.zsh.syntaxHighlighting.enable`. The other two used to end
+  their `initContent` with a conditional `source` of
+  `/usr/share/zsh-syntax-highlighting/...`, which cannot ever have worked:
+  *verified* that `/usr` on NixOS holds only `bin`. That dead block is gone;
+  moving the one-line option into `common/home-manager/base.nix` would give
+  all three the highlighting the block was reaching for.
 
 - [ ] **No `programs.git` anywhere** — the git identity is set imperatively on
   each host despite three machines sharing a config.
