@@ -1,0 +1,14 @@
+[SddmGreeterTheme]
+Name=hyprlock
+Description=SDDM greeter matching the hyprlock lock screen
+Type=sddm-theme
+Version=1.0
+Author=alr
+License=MIT
+MainScript=Main.qml
+Theme-Id=hyprlock
+Theme-API=2.0
+# Selects sddm-greeter-qt6. Without this SDDM defaults to 5, looks for a plain
+# `sddm-greeter` that nixpkgs does not build, and silently falls back to the
+# built-in theme -- see the assertion in ../sddm-hyprlock.nix.
+QtVersion=6

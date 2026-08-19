@@ -1,7 +1,16 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.local.waybar;
+in
 {
-  programs.waybar = {
+  options.local.waybar.modulesRight = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    default = [ "pulseaudio" "bluetooth" "network" "cpu" "memory" "battery" "tray" ];
+    description = "Order of the right-hand waybar modules.";
+  };
+
+  config.programs.waybar = {
 
     enable = true;
 
@@ -23,7 +32,7 @@
 
         modules-left = [ "hyprland/workspaces" "hyprland/submap" ];
         modules-center = [ "clock" "hyprland/window" ];
-        modules-right = [ "tray" "pulseaudio" "bluetooth" "network" "cpu" "memory" "battery" ];
+        modules-right = cfg.modulesRight;
 
         "hyprland/workspaces" = {
           on-click = "activate";

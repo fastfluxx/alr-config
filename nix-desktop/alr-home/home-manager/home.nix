@@ -1,9 +1,15 @@
 { config, pkgs, ... }:
 
+let
+  # DOTNET_ROOT and the `dotnet` on PATH have to be the same tree; dotnet-sdk_10
+  # is a different patch version from dotnetCorePackages.dotnet_10.sdk.
+  dotnet = pkgs.dotnetCorePackages.dotnet_10.sdk;
+in
 {
 
   imports = [
     ./hyprland.nix
+    ../../common/home-manager/ssh.nix
   ];
   # Home config
   home.username = "alr";
@@ -18,12 +24,8 @@
   # release notes.
   home.stateVersion = "24.05"; # Please read the comment before changing.
 
-  nixpkgs.config = {
-  	allowUnfree = true;
-  };
-
   home.sessionVariables = {
-	DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet"; 
+	DOTNET_ROOT = "${dotnet}/share/dotnet";
   };
 
 
@@ -82,7 +84,7 @@
 	pkgs.dotnet-ef
 	pkgs.jetbrains.jdk
 	#pkgs.dotnetCorePackages.dotnet_9.sdk
-	pkgs.dotnetCorePackages.dotnet_10.sdk
+	dotnet
 	pkgs.kdePackages.kdenlive
   ];
 
@@ -125,36 +127,6 @@
   };
 
 
-  programs.ssh = {
-    enable = true;
-
-    enableDefaultConfig = false; 
-    
-
-
-	matchBlocks = {
-      	# Block 1: A general block for all hosts (*)
-      	# You must define this if you set enableDefaultConfig = false
-      	"*" = {
-        # Common options for all connections
-        # The value must be a string, or true/false for boolean options.
-        user = config.home.username; # Default user for all hosts
-        serverAliveInterval = 60;
-      	};
-
-      # Block 2: Specific configuration for a remote server
-      	"github.com" = {
-        	hostname = "github.com";
-        	user = "git";
-        	identityFile = [ "~/.ssh/alr.priv" ]; # Specific key for GitHub
-        	identitiesOnly = true; # Only use the key specified above
-      	};
-
-
-  };
-
-};
-
 programs.zsh = {
 
         enable = true;
@@ -171,7 +143,7 @@ programs.zsh = {
             cat="bat -p";
             ssh="TERM=xterm-256color ssh";
 	        vim="nvim";
-            nix-clean="sudo nix-collect-garbage --delete-older-than 15d && sudo nixos-rebuild boot --flake .#alr-work";
+            nix-clean="sudo nix-collect-garbage --delete-older-than 15d";
 
         };
 
@@ -182,16 +154,7 @@ programs.zsh = {
 
         initContent = 
         "
-          # Check if zsh-autosuggestions script is not downloaded
-          if [[ ! -f ~/.zsh/zsh-autosuggestions.zsh ]]; then
-          # Download zsh-autosuggestions script
-          mkdir -p ~/.zsh
-          curl -o ~/.zsh/zsh-autosuggestions.zsh https://raw.githubusercontent.com/zsh-users/zsh-autosuggestions/master/zsh-autosuggestions.zsh
-          fi
- 
-        # Source zsh-autosuggestions script
-        source ~/.zsh/zsh-autosuggestions.zsh
- 
+        # autosuggestion.enable above already sources the plugin from the store.
  
         # The following lines were added by compinstall
         zstyle :compinstall filename '~/.zshrc'
@@ -218,7 +181,4 @@ programs.zsh = {
       };
 
 
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
 }

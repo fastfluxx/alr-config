@@ -5,6 +5,7 @@
   imports =
     [
       #./hosts.nix
+      ../../common/nixos/nix.nix
     ];
 
 
@@ -38,7 +39,13 @@
         modesetting.enable = true;
         open = false; # Absolutely keep this false; open kernel modules do not support Pascal!
 
-        # Manually construct the 580 legacy driver with explicit hashes
+        # Manually construct the 580 legacy driver with explicit hashes.
+        # This card is a GTX 1080 (Pascal), and 580 is the last branch
+        # NVIDIA supports it on -- so the pin is the hardware talking, not
+        # inertia. 580.95.05 specifically is the build this host is known
+        # good on; do not move it to `production`, and do not swap it for
+        # `nvidiaPackages.legacy_580` (580.178.04) without testing on the
+        # machine, since that is a different build of the same branch.
         package = config.boot.kernelPackages.nvidiaPackages.production.overrideAttrs {
             version = "580.95.05";
             src = pkgs.fetchurl {
@@ -91,10 +98,6 @@
 
 
 
-  ## Enable flakes
-  nix.settings.experimental-features = "nix-command flakes";
-
-
     fonts.packages = with pkgs; [
         nerd-fonts.jetbrains-mono
     ];
@@ -105,8 +108,9 @@
         XDG_SESSION_TYPE = "wayland";
         GBM_BACKEND = "nvidia-drm";
         __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-        WLR_NO_HARDWARE_CURSORS = "1";  # Fixes invisible cursor on Nvidia
-        HYPRLAND_NO_HARDWARE_CURSORS = "1";
+        # WLR_NO_HARDWARE_CURSORS / HYPRLAND_NO_HARDWARE_CURSORS were dropped:
+        # neither string appears in the Hyprland 0.56 binary. If the cursor goes
+        # missing on Nvidia again, it is a cursor setting in hl.config() now.
         NIXOS_OZONE_WL = "1";
     };
 
@@ -127,40 +131,6 @@
 
 
   networking.firewall.enable = true;
-
-
-  # --- Air-Gap Specialisation ---
-  specialisation.airgap.configuration = {
-    system.nixos.tags = [ "air-gapped" ];
-
-
-  networking.firewall = {
-      # 1. Block everything by default
-      extraCommands = ''
-        # Flush existing custom chains
-        iptables -F OUTPUT
-        
-        # Set default policy to DROP for outgoing
-        iptables -P OUTPUT DROP
-
-        # Allow Loopback (Internal system comms)
-        iptables -A OUTPUT -o lo -j ACCEPT
-
-        # Allow Local LAN Traffic (Edit these ranges as needed)
-        iptables -A OUTPUT -d 192.168.15.0/24 -j ACCEPT
-        
-        # Allow Multicast/mDNS (Optional: for .local addresses)
-        iptables -A OUTPUT -d 224.0.0.0/4 -j ACCEPT
-      '';
-
-      # Ensure we clean up when switching back
-      extraStopCommands = ''
-        iptables -P OUTPUT ACCEPT
-      '';
-    };
-
-    };
-  
 
 
   # Set your time zone.
