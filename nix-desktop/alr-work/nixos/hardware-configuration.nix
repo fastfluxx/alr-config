@@ -21,7 +21,9 @@
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/3700-BBA4";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      # 0077 so the ESP is root-only, matching alr-home. The generated value
+      # was 0022, which left /boot world-readable.
+      options = [ "fmask=0077" "dmask=0077" ];
     };
 
   swapDevices =

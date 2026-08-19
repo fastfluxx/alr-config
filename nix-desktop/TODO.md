@@ -34,14 +34,6 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
   Worth deciding whether the UniFi controller belongs on the gaming machine at
   all.
 
-## Hardening
-
-- [ ] **alr-work's ESP is world-readable** —
-  `alr-work/nixos/hardware-configuration.nix:24` mounts `/boot` with
-  `fmask=0022` / `dmask=0022`, against `0077` at
-  `alr-home/nixos/hardware-configuration.nix:26`. The two machines disagree for
-  no reason.
-
 ## Minor
 
 - [ ] **Remove `~/.gitconfig` on each host** — `programs.git` now writes
