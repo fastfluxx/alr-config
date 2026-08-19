@@ -5,6 +5,7 @@
   imports =
     [
       ./hosts.nix
+      ../../common/nixos/nix.nix
       ../../common/nixos/sddm-greeter.nix
       ../../common/nixos/sddm-hyprlock.nix
     ];
@@ -110,10 +111,6 @@
   # EFI systemd bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-
-  ## Enable flakes
-  nix.settings.experimental-features = "nix-command flakes";
 
 
     fonts.packages = with pkgs; [

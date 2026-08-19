@@ -69,27 +69,67 @@ All seven fixed 2026-08-18; kept here for the record of what was wrong and why.
 
 ## Stale or fragile
 
-- [ ] **Replace the hand-rolled NVIDIA pin with the packaged driver** —
+- [x] **Replace the hand-rolled NVIDIA pin with the packaged driver** —
   `alr-game/nixos/configuration.nix:42` rewrites `version` and `src` on
   `nvidiaPackages.production` (now **595.91.07**) down to 580.95.05 with a
-  hardcoded hash, applying 595-era packaging to a 580 tarball. *Verified*:
-  nixpkgs ships `nvidiaPackages.legacy_580` at **580.178.04** -- same branch
-  (the last supporting Pascal, so the pin itself is right), properly packaged,
-  no hash to maintain:
+  hardcoded hash.
 
-  ```nix
-  package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
-  ```
+  Closed 2026-08-19 as a deliberate no. alr-game drives a **GTX 1080
+  (Pascal)**, and 580.95.05 is the pinned build it is known to work with. The
+  driver is not to be moved. Do not re-propose this.
 
-- [ ] **Add the Hyprland binary cache** — no `substituters` anywhere in the repo,
+  Two corrections to the original finding, for the record:
+
+  - The claim that this applies "595-era packaging to a 580 tarball" does not
+    hold. *Verified*: the resulting derivation
+    (`nvidia-x11-580.95.05.drv`) contains **zero** references to 595 -- every
+    output, source and store path resolves to 580.95.05 consistently, because
+    `overrideAttrs` propagates the new version through them. The override is
+    self-consistent; the cost is the hand-maintained sha256, not correctness.
+
+  - `nvidiaPackages.legacy_580` (**580.178.04** in the locked nixpkgs) is the
+    same Pascal-supporting branch, so it would satisfy the hardware constraint
+    while dropping the hash. It is *not* the same build as the current pin.
+    Only relevant if the pin is ever relaxed from a specific build to the
+    branch; noted here so the option is not rediscovered from scratch.
+
+  **For later -- the one real risk in this pin.** The 580.95.05 tarball is not
+  a version nixpkgs builds, so no binary cache has it. *Verified 2026-08-19*:
+  `nix path-info --store https://cache.nixos.org` reports the src path
+  `f17j503nfcjnqhqfadkvbzv03gd0si71-NVIDIA-Linux-x86_64-580.95.05.run` as **not
+  valid** -- it exists nowhere but NVIDIA's CDN, which still answers 200 today.
+  Everything therefore depends on that one URL staying up. If NVIDIA retires
+  it, alr-game keeps working off the store path it already has, but can no
+  longer rebuild the driver from scratch: a reinstall, or a GC that drops the
+  path once it is unreferenced, would leave the host with no way to fetch it.
+
+  Cheap insurance, in rough order of effort: keep a copy of the `.run` file
+  somewhere durable; or push the driver closure to a private cache so it
+  survives independently of NVIDIA. Worth doing before it is urgent, since the
+  failure mode only shows up at the moment the machine most needs to rebuild.
+
+  Revisit the pin itself only if the card is replaced. A Turing or newer GPU
+  retires this whole block along with `open = false` on the line above it.
+
+- [x] **Add the Hyprland binary cache** — no `substituters` anywhere in the repo,
   so each flake bump compiles Hyprland and its deps from source. *Verified*: the
   current Hyprland store path is served by `https://hyprland.cachix.org`
   (`nix path-info --store https://hyprland.cachix.org <path>` resolves). Add the
   substituter and its public key to `nix.settings`.
 
-- [ ] **No automatic garbage collection** — only the manual `nix-clean` alias.
-  Worth setting `nix.gc.automatic` and `nix.optimise.automatic` on all three
-  hosts, which track unstable.
+  Done 2026-08-19 in `common/nixos/nix.nix`, using `extra-substituters` rather
+  than `substituters`: a definition overrides the option default instead of
+  merging with it, so assigning the latter would have silently dropped
+  cache.nixos.org. *Verified*: the rendered `/etc/nix/nix.conf` keeps
+  `substituters = https://cache.nixos.org/` and appends the Hyprland cache.
+
+- [x] **No automatic garbage collection** — only the manual `nix-clean` alias.
+  Originally filed as "worth setting `nix.gc.automatic` and
+  `nix.optimise.automatic`".
+
+  Closed 2026-08-19 as a deliberate no: store cleanup and deleting old
+  generations stay manual. A timer decides on its own schedule which
+  generations stop being rollback targets. Do not re-propose this.
 
 - [ ] **alr-game builds MongoDB from source** — `services.unifi` at
   `alr-game/nixos/configuration.nix:207` pins `mongodbPackage = pkgs.mongodb-7_0`,
@@ -116,6 +156,8 @@ All seven fixed 2026-08-18; kept here for the record of what was wrong and why.
   `libvirtd` / `kvm` / `docker`, `sessionVariables` differ, blueman is on two of
   three. `common/nixos/` now exists -- a `base.nix` plus a `desktop.nix` is the
   same refactor already done for hosts and for home-manager.
+  `common/nixos/nix.nix` is the first piece of it, and all three hosts now
+  import it; `experimental-features` has already moved there.
 
 - [ ] **`home.nix` is triplicated** — 46 / 39 / 33 package entries with heavy
   overlap, plus the duplicated zsh block above.

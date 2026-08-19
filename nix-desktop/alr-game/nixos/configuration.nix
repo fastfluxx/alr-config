@@ -5,6 +5,7 @@
   imports =
     [
       #./hosts.nix
+      ../../common/nixos/nix.nix
     ];
 
 
@@ -38,7 +39,13 @@
         modesetting.enable = true;
         open = false; # Absolutely keep this false; open kernel modules do not support Pascal!
 
-        # Manually construct the 580 legacy driver with explicit hashes
+        # Manually construct the 580 legacy driver with explicit hashes.
+        # This card is a GTX 1080 (Pascal), and 580 is the last branch
+        # NVIDIA supports it on -- so the pin is the hardware talking, not
+        # inertia. 580.95.05 specifically is the build this host is known
+        # good on; do not move it to `production`, and do not swap it for
+        # `nvidiaPackages.legacy_580` (580.178.04) without testing on the
+        # machine, since that is a different build of the same branch.
         package = config.boot.kernelPackages.nvidiaPackages.production.overrideAttrs {
             version = "580.95.05";
             src = pkgs.fetchurl {
@@ -89,10 +96,6 @@
   boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_750_EVO_500GB_S36SNWBH713688A";
   boot.loader.grub.useOSProber = true;
 
-
-
-  ## Enable flakes
-  nix.settings.experimental-features = "nix-command flakes";
 
 
     fonts.packages = with pkgs; [
