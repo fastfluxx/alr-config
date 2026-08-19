@@ -175,11 +175,18 @@ All seven fixed 2026-08-18; kept here for the record of what was wrong and why.
 
 ## Hardening
 
-- [ ] **The air-gap specialisation is IPv4-only** —
-  `alr-game/nixos/configuration.nix:139` sets `iptables -P OUTPUT DROP` with no
+- [x] **The air-gap specialisation is IPv4-only** —
+  `alr-game/nixos/configuration.nix:139` set `iptables -P OUTPUT DROP` with no
   `ip6tables` equivalent, leaving IPv6 egress open in the mode whose whole point
-  is blocking egress. Note also that `networking.nameservers = [ "1.1.1.1" ]` is
-  unreachable under those rules, so DNS fails rather than resolving locally.
+  is blocking egress. `networking.nameservers = [ "1.1.1.1" ]` was also
+  unreachable under those rules, so DNS failed rather than resolving locally.
+
+  Resolved 2026-08-19 by deleting the specialisation: it is no longer wanted.
+  The bug is therefore moot rather than fixed. `networking.nameservers` stays,
+  and is reachable again now that nothing drops egress. Recoverable from git
+  history if air-gapping is ever revived -- and if it is, the IPv6 hole above
+  is the first thing to fix, since NixOS injects an `ip46tables` helper into
+  `extraCommands` that the original rules never used.
 
 - [ ] **alr-work's ESP is world-readable** — `fmask=0022` / `dmask=0022` in
   `alr-work/nixos/hardware-configuration.nix`, against `0077` on alr-home. The
