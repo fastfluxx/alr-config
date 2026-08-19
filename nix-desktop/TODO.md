@@ -34,17 +34,6 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
   Worth deciding whether the UniFi controller belongs on the gaming machine at
   all.
 
-## Duplication and drift
-
-- [ ] **The ssh migration only half-landed** — `common/home-manager/ssh.nix` is
-  imported by alr-home and alr-game, but alr-work keeps an inline `programs.ssh`
-  at `home-manager/home.nix:143`. They differ in substance: alr-work uses three
-  GitHub keys (two FIDO2 `sk` keys plus `alr.laud`) and sets `IdentityFile` /
-  `IdentitiesOnly` on `*`; the shared module has neither and uses `alr.priv`.
-  Both generate valid config -- ssh_config keywords are case-insensitive, so the
-  lowercase keys work -- so this is drift, not breakage. Give the shared module
-  options and import it on alr-work.
-
 ## Hardening
 
 - [ ] **alr-work's ESP is world-readable** —

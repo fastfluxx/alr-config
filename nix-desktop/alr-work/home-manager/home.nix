@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   # DOTNET_ROOT and the `dotnet` on PATH have to be the same tree: pointing the
@@ -14,7 +14,20 @@ in
   imports = [
     ./hyprland.nix
     ../../common/home-manager/base.nix
+    ../../common/home-manager/ssh.nix
   ];
+
+  # This host pins one identity for every connection, and reaches GitHub with
+  # two FIDO2 tokens before the ordinary key. The sk keys go first so that a
+  # touch is only ever asked for once ssh has run out of non-token options.
+  local.ssh = {
+    defaultIdentityFile = "~/.ssh/alr.priv";
+    githubIdentityFiles = [
+      "~/.ssh/id_ed25519_sk"
+      "~/.ssh/id_ed25519_sk_02"
+      "~/.ssh/alr.laud"
+    ];
+  };
 
   home.sessionVariables = {
     DOTNET_ROOT = "${dotnet}/share/dotnet";
@@ -48,55 +61,17 @@ in
     pkgs.aider-chat
   ];
 
-  programs.ssh = {
-    enable = true;
-
-    enableDefaultConfig = false;
-
-    settings = {
-
-        "*" = {
-            user = config.home.username; # Default user for all hosts
-            identityFile = "~/.ssh/alr.priv";
-            identitiesOnly = true;
-            serverAliveInterval = 60;
-        };
-
-      # Block 2: Specific configuration for a remote server
-        "github.com" = {
-            hostname = "github.com";
-            user = "git";
-            identityFile = [ "~/.ssh/id_ed25519_sk" "~/.ssh/id_ed25519_sk_02" "~/.ssh/alr.laud" ]; # Specific key for GitHub
-            identitiesOnly = true; # Only use the key specified above
-        };
-
-
- #  "sg220" = {
- #          hostname = "10.0.1.42";
- #          user = "cisco";
- #
- #      extraOptions = {
- #              "KexAlgorithms" = "+diffie-hellman-group1-sha1";
- #              "HostKeyAlgorithms" = "+ssh-rsa";
- #              "Ciphers" = "aes128-cbc,aes128-ctr,aes192-ctr,aes256-ctr";
- #          };
- #
- #};
-
-    #   "sg300" = {
-      #     hostname = "10.0.1.41";
-      #     user = "cisco";
-
-     #  extraOptions = {
-     #          "KexAlgorithms" = "+diffie-hellman-group1-sha1";
-     #          "HostKeyAlgorithms" = "+ssh-rsa";
-     #          "Ciphers" = "aes128-cbc,aes128-ctr,aes192-ctr,aes256-ctr";
-     #      };
-
-    #};
-
-    };
-
-  };
+  # The switches below want ancient kex/cipher algorithms and are kept here
+  # rather than in the shared module: they are reachable only from this host.
+  #
+  # programs.ssh.settings."sg220" = {
+  #   HostName = "10.0.1.42";
+  #   User = "cisco";
+  #   KexAlgorithms = "+diffie-hellman-group1-sha1";
+  #   HostKeyAlgorithms = "+ssh-rsa";
+  #   Ciphers = "aes128-cbc,aes128-ctr,aes192-ctr,aes256-ctr";
+  # };
+  #
+  # programs.ssh.settings."sg300" = { ... same, HostName = "10.0.1.41"; };
 
 }
