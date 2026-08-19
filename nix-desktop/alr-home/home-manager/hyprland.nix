@@ -8,6 +8,7 @@
     ../../common/home-manager/hyprlock.nix
     ../../common/home-manager/hypridle.nix
     ../../common/home-manager/ghostty.nix
+    ../../common/home-manager/screenshot.nix
   ];
 
   # hyprlock was commented out of this host's imports, so locking has never
@@ -15,6 +16,7 @@
   # hypridle then grows a lock listener and Hyprland a $mod+L bind.
   local.hyprlock.enable = false;
   local.hypridle.enable = true;
+  local.screenshot.enable = true;
 
   local.waybar.modulesRight = [ "tray" "pulseaudio" "bluetooth" "network" "cpu" "memory" "battery" ];
 

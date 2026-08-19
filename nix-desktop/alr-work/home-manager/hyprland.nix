@@ -8,10 +8,12 @@
     ../../common/home-manager/hyprlock.nix
     ../../common/home-manager/hypridle.nix
     ../../common/home-manager/ghostty.nix
+    ../../common/home-manager/screenshot.nix
   ];
 
   local.hyprlock.enable = true;
   local.hypridle.enable = true;
+  local.screenshot.enable = true;
 
   local.hyprland = {
     enable = true;

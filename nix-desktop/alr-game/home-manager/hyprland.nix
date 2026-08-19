@@ -8,10 +8,13 @@
     ../../common/home-manager/hyprlock.nix
     ../../common/home-manager/hypridle.nix
     ../../common/home-manager/ghostty.nix
+    ../../common/home-manager/screenshot.nix
   ];
 
   # No lock screen on this host.
   local.hyprlock.enable = false;
+
+  local.screenshot.enable = true;
 
   local.hypridle = {
     enable = true;
