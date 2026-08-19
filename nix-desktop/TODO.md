@@ -162,16 +162,27 @@ All seven fixed 2026-08-18; kept here for the record of what was wrong and why.
 - [ ] **`home.nix` is triplicated** — 46 / 39 / 33 package entries with heavy
   overlap, plus the duplicated zsh block above.
 
-- [ ] **Dangling `#./hosts.nix`** — `alr-home/nixos/configuration.nix:7` and
-  `alr-game/nixos/configuration.nix:7` reference a file that exists only under
-  `alr-work/nixos/`, so uncommenting either fails. Move it to
-  `common/nixos/hosts.nix` or drop the lines.
+- [x] **Dangling `#./hosts.nix`** — `alr-home/nixos/configuration.nix:7` and
+  `alr-game/nixos/configuration.nix:7` referenced a file that exists only under
+  `alr-work/nixos/`, so uncommenting either would have failed.
 
-- [ ] **alr-work's LUKS device is declared twice** —
+  Fixed 2026-08-19 by dropping the lines rather than moving the file to
+  `common/`: its contents are `networking.extraHosts` entries for `kali.nat`
+  and `kali.ho` on 10.80.90.0, which are work-specific and of no use to the
+  other two hosts. Sharing it would have moved dead config rather than removing
+  it.
+
+- [x] **alr-work's LUKS device is declared twice** —
   `nixos/hardware-configuration.nix:21` and `nixos/configuration.nix:54`. This
-  evaluates only because both give the identical UUID; change one and it becomes
-  a conflicting-definition error. The FIDO2 `crypttabExtraOpts` already live in
-  `configuration.nix`, so drop the generated line.
+  evaluated only because both gave the identical UUID; changing one would have
+  made it a conflicting-definition error.
+
+  Fixed 2026-08-19 by dropping the generated line, keeping the
+  `configuration.nix` block that also carries `crypttabExtraOpts =
+  [ "fido2-device=auto" ]`. *Verified*: `boot.initrd.luks.devices` evaluates
+  byte-identically before and after --
+  `{"crypted":{"crypttabExtraOpts":["fido2-device=auto"],"device":"/dev/disk/by-uuid/949ff513-..."}}`
+  -- so unlocking at boot is unaffected.
 
 ## Hardening
 
@@ -194,8 +205,11 @@ All seven fixed 2026-08-18; kept here for the record of what was wrong and why.
 
 ## Minor
 
-- [ ] `security.pam.services.hyprlock = {}` on alr-home and alr-game, where
-  hyprlock is disabled.
+- [x] `security.pam.services.hyprlock = {}` on alr-home and alr-game, where
+  hyprlock is disabled. Removed 2026-08-19; alr-work keeps it, since hyprlock
+  is enabled there. *Verified*: the `hyprlock` PAM service is now absent from
+  both hosts and still present on alr-work. Re-add it alongside
+  `local.hyprlock.enable` if either host ever gains a lock screen.
 - [ ] waybar's default `modulesRight` includes `battery`; alr-game is a desktop
   and uses the default.
 - [ ] oh-my-zsh's `agnoster` theme plus a manual `export PS1` in `initContent` --

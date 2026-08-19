@@ -4,7 +4,6 @@
 {
   imports =
     [
-      #./hosts.nix
       ../../common/nixos/nix.nix
     ];
 
@@ -64,8 +63,6 @@
 
     # Add PipeWire for audio
     security.rtkit.enable = true;
-
-    security.pam.services.hyprlock = {};
 
     services.pipewire = {
       enable = true;

@@ -18,8 +18,6 @@
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."crypted".device = "/dev/disk/by-uuid/949ff513-958e-410c-afdb-3d3b25347d70";
-
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/3700-BBA4";
       fsType = "vfat";
