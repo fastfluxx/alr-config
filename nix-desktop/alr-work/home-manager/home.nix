@@ -17,6 +17,9 @@ in
     ../../common/home-manager/ssh.nix
   ];
 
+  # Work machine: commits carry the work address, not the personal default.
+  local.git.email = "aleks@laud-media.com";
+
   # This host pins one identity for every connection, and reaches GitHub with
   # two FIDO2 tokens before the ordinary key. The sk keys go first so that a
   # touch is only ever asked for once ssh has run out of non-token options.

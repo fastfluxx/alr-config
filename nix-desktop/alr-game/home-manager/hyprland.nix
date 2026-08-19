@@ -21,6 +21,9 @@
     dpmsTimeout = 500;
   };
 
+  # No battery on a desktop; otherwise the shared default.
+  local.waybar.modulesRight = [ "pulseaudio" "bluetooth" "network" "cpu" "memory" "tray" ];
+
   local.hyprland = {
     enable = true;
     wallpaper = ../../wallpaper/Fantasy-Autumn.png;

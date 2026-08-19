@@ -44,25 +44,12 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
 
 ## Minor
 
-- [ ] **oh-my-zsh's `agnoster` theme is inert** — now in one place,
-  `common/home-manager/base.nix`, where `oh-my-zsh.theme` is set and
-  `initContent` exports `PS1` by hand a few lines below. The manual prompt
-  wins, so the theme setting does nothing. Pick one.
-
-- [ ] **No zsh syntax highlighting on alr-work or alr-home** — only alr-game
-  sets `programs.zsh.syntaxHighlighting.enable`. The other two used to end
-  their `initContent` with a conditional `source` of
-  `/usr/share/zsh-syntax-highlighting/...`, which cannot ever have worked:
-  *verified* that `/usr` on NixOS holds only `bin`. That dead block is gone;
-  moving the one-line option into `common/home-manager/base.nix` would give
-  all three the highlighting the block was reaching for.
-
-- [ ] **No `programs.git` anywhere** — the git identity is set imperatively on
-  each host despite three machines sharing a config.
-
-- [ ] **waybar shows a battery on a desktop** — `local.waybar.modulesRight`
-  defaults to a list including `battery` (`common/home-manager/waybar.nix:9`)
-  and alr-game takes the default.
+- [ ] **Remove `~/.gitconfig` on each host** — `programs.git` now writes
+  `~/.config/git/config`, but the hand-written `~/.gitconfig` still exists and
+  takes precedence, so the declarative identity is inert until it is gone.
+  *Verified* with two scratch configs: with both files present git returns the
+  `~/.gitconfig` value; with only the XDG one it returns that. Delete or rename
+  `~/.gitconfig` after switching, on all three machines.
 
 - [ ] **No notification daemon on any host** — nothing owns
   `org.freedesktop.Notifications`, so `notify-send` fails with

@@ -6,6 +6,8 @@
 { lib, pkgs, ... }:
 
 {
+  imports = [ ./git.nix ];
+
   home.username = "alr";
   home.homeDirectory = "/home/alr";
 
@@ -81,11 +83,16 @@
     enable = true;
     autosuggestion.enable = true;
 
+    # alr-work and alr-home used to reach for this by sourcing
+    # /usr/share/zsh-syntax-highlighting/..., which cannot exist on NixOS.
+    # This is the option that actually does it, and it belongs on all three.
+    syntaxHighlighting.enable = true;
+
     oh-my-zsh = {
       enable = true;
-      # Inert while initContent exports PS1 below -- the manual prompt wins.
-      # Kept so that dropping the export brings the theme back.
-      theme = "agnoster";
+      # No theme on purpose: initContent below exports PS1 by hand, and the
+      # manual prompt wins regardless of what a theme sets. `agnoster` used to
+      # be set here and did nothing.
       plugins = [ "git" "z" "sudo" "docker" ];
     };
 
