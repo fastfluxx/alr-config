@@ -36,16 +36,6 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
 
 ## Duplication and drift
 
-- [ ] **The three `configuration.nix` files repeat ~100 lines each** —
-  `programs.hyprland`, `hardware.graphics`, pipewire, rtkit, polkit, fonts,
-  timezone, i18n, xkb, console, `users.users.alr`, `allowUnfree`, zsh. The
-  drift is already visible: alr-game's user lacks `libvirtd` / `kvm` /
-  `docker`, `sessionVariables` differ, blueman is on two of three.
-
-  `common/nixos/nix.nix` is the first piece of the `base.nix` this wants, and
-  all three hosts import it. A `base.nix` plus a `desktop.nix` is the same
-  refactor already done for home-manager.
-
 - [ ] **`home.nix` is triplicated** — 46 / 39 / 33 package entries with heavy
   overlap, plus the duplicated zsh block below.
 
