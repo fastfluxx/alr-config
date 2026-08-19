@@ -10,6 +10,36 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
 (`alr-game/nixos/configuration.nix`), and store cleanup stays manual with no
 `nix.gc` timer (`common/nixos/nix.nix`).
 
+## Pending on the machines
+
+None of this is a code change -- it is work the repo cannot do for itself.
+State recorded 2026-08-19.
+
+- [ ] **Switch all three hosts.** alr-work runs `kv2rz210...` while `main`
+  evaluates to `sp8ys10k...`, so nothing since the ssh migration is live
+  anywhere: the shared base modules, the git identity, mako, and the ESP
+  change are all committed and unapplied. `nixos-rebuild switch --flake .`
+
+- [ ] **Push `main`.** Four commits ahead of `origin/main`: the ssh migration,
+  the four small home-manager fixes, mako, and the ESP change.
+
+- [ ] **Remount `/boot` on alr-work.** *Verified*: it is still mounted
+  `fmask=0022,dmask=0022`. Switching does not remount an already-mounted
+  filesystem, so this needs `mount -o remount /boot` or a reboot before the
+  0077 in the config is real.
+
+- [ ] **Remove `~/.gitconfig` on each host,** after switching. `programs.git`
+  now writes `~/.config/git/config`, but the hand-written `~/.gitconfig` still
+  exists here and takes precedence, so the declarative identity stays inert
+  until it is gone. *Verified* with two scratch configs: with both files
+  present git returns the `~/.gitconfig` value; with only the XDG one it
+  returns that.
+
+- [ ] **Press `SUPER + SHIFT + S`.** The region grab is the one path in the
+  screenshot tool never exercised by a human -- it needs a real pointer drag.
+  Window and output modes were run and produced correct captures. With mako
+  now installed, a "Screenshot saved" notification should appear too.
+
 ## Stale or fragile
 
 - [ ] **alr-game's NVIDIA driver has exactly one source** — the pinned
@@ -33,15 +63,6 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
   on every rebuild that touches it. It is why that host is slow to switch.
   Worth deciding whether the UniFi controller belongs on the gaming machine at
   all.
-
-## Minor
-
-- [ ] **Remove `~/.gitconfig` on each host** — `programs.git` now writes
-  `~/.config/git/config`, but the hand-written `~/.gitconfig` still exists and
-  takes precedence, so the declarative identity is inert until it is gone.
-  *Verified* with two scratch configs: with both files present git returns the
-  `~/.gitconfig` value; with only the XDG one it returns that. Delete or rename
-  `~/.gitconfig` after switching, on all three machines.
 
 ## Open questions
 
