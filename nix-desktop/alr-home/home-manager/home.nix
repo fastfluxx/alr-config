@@ -30,6 +30,8 @@ in
     pkgs.dotnet-ef
     pkgs.jetbrains.jdk
     dotnet
+    # Android
+    pkgs.android-tools
     # Video editing
     pkgs.kdePackages.kdenlive
   ];
