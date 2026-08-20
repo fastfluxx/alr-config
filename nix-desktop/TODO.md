@@ -35,6 +35,11 @@ State recorded 2026-08-19.
   present git returns the `~/.gitconfig` value; with only the XDG one it
   returns that.
 
+- [ ] **Decide what happens to `/var/lib/unifi` on alr-game.** `services.unifi`
+  was removed from the config, so switching stops the daemon and leaves the
+  controller's state directory behind. Nothing deletes it -- keep it if the
+  controller may come back elsewhere, otherwise remove it by hand.
+
 - [ ] **Press `SUPER + SHIFT + S`.** The region grab is the one path in the
   screenshot tool never exercised by a human -- it needs a real pointer drag.
   Window and output modes were run and produced correct captures. With mako
@@ -56,13 +61,6 @@ State recorded 2026-08-19.
   `urls` list and tries them in order. Note `fetchurl` throws if given both
   `url` and `urls`, so it is a swap, not an addition. The hash is unchanged, so
   it rebuilds nothing.
-
-- [ ] **alr-game builds MongoDB from source** — `services.unifi` at
-  `alr-game/nixos/configuration.nix:178` pins `mongodbPackage = pkgs.mongodb-7_0`,
-  which is not in the binary cache (SSPL), so `mongodb-7.0.39` compiles locally
-  on every rebuild that touches it. It is why that host is slow to switch.
-  Worth deciding whether the UniFi controller belongs on the gaming machine at
-  all.
 
 ## Open questions
 

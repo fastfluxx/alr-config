@@ -70,13 +70,4 @@
     pulseaudio      # For audio control
   ];
 
-  # Enable the background daemon and open the necessary ports
-  #services.unifi = {
-  #  enable = true;
-  #  openFirewall = true;
-
-  #  unifiPackage = pkgs.unifi;
-  #  mongodbPackage = pkgs.mongodb-7_0;
-  #};
-
 }
