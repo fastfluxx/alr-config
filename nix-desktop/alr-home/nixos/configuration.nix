@@ -43,6 +43,8 @@
     otherOutputs = [ "eDP-1" ];
   };
 
+  security.pam.services.hyprlock = {};
+
   # EFI systemd bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

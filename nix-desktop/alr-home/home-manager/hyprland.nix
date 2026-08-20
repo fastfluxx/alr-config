@@ -12,10 +12,7 @@
     ../../common/home-manager/mako.nix
   ];
 
-  # hyprlock was commented out of this host's imports, so locking has never
-  # actually worked here. Set local.hyprlock.enable = true to turn it on;
-  # hypridle then grows a lock listener and Hyprland a $mod+L bind.
-  local.hyprlock.enable = false;
+  local.hyprlock.enable = true;
   local.hypridle.enable = true;
   local.screenshot.enable = true;
   local.mako.enable = true;

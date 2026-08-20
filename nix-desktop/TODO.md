@@ -66,11 +66,6 @@ State recorded 2026-08-19.
 
 ## Open questions
 
-- [ ] alr-home has `local.hyprlock.enable = false`, so it has a login screen
-  styled after a lock screen that host does not have. One line turns hyprlock on
-  there if the pair should match. Note `security.pam.services.hyprlock` was
-  removed from that host and needs re-adding alongside it.
-
 - [ ] `services.displayManager.defaultSession = "hyprland"` only decides what
   runs when nothing is remembered -- `SessionModel::selectDefaultSession()`
   checks `/var/lib/sddm/state.conf` first. Making it authoritative would mean
