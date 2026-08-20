@@ -35,10 +35,13 @@
     extraGroups = [ "networkmanager" "wheel" "video" ];
   };
 
+  # nm-applet and brightnessctl used to live here. Both are laptop hardware
+  # talking: alr-game has no wireless radio for the applet to offer and no
+  # /sys/class/backlight for brightnessctl to write to, so they moved to the
+  # two laptops -- see the rule at the top of this file. `nmcli` is unaffected;
+  # it comes from networkmanager itself, which all three hosts enable.
   environment.systemPackages = with pkgs; [
     git
     vim
-    networkmanagerapplet # Wi-Fi tray icon
-    brightnessctl # Screen brightness
   ];
 }

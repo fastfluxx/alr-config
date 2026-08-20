@@ -63,6 +63,8 @@
   users.users.alr.extraGroups = [ "libvirtd" "kvm" "docker" ];
 
   environment.systemPackages = with pkgs; [
+    networkmanagerapplet  # Wi-Fi tray icon and nm-connection-editor
+    brightnessctl         # Backlight control; this host has a panel
     iptables
     ebtables
     dnsmasq
