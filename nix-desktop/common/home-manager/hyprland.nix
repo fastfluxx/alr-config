@@ -214,7 +214,11 @@ in
           (bind "${mod} + SPACE" (exec "wofi --show drun"))
           (bind "${mod} + V" "hl.dsp.window.float({ action = ${str "toggle"} })")
 
-          # Move the active window to workspace 10
+          # Workspace 10. The generated 1..9 binds below stop at 9 because
+          # there is no "${mod} + 10" key, so both halves of the pair are
+          # spelled out here -- without the focus bind a window moved to 10
+          # could only be reached with the mouse.
+          (bind "${mod} + 0" "hl.dsp.focus({ workspace = 10 })")
           (bind "${mod} + SHIFT + 0" "hl.dsp.window.move({ workspace = 10 })")
 
           # Mouse binds (was `bindm`)

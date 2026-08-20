@@ -25,12 +25,16 @@ in
     };
   };
 
+  # `settings` is the current option: it takes git config verbatim, section by
+  # section. The older userName/userEmail/extraConfig spellings still work but
+  # warn on every evaluation, and renames become removals.
   config.programs.git = {
     enable = true;
-    userName = cfg.userName;
-    userEmail = cfg.email;
 
-    extraConfig = {
+    settings = {
+      user.name = cfg.userName;
+      user.email = cfg.email;
+
       # Left pointing at the hand-maintained file rather than managed through
       # programs.git.ignores, which would take ownership of it. It currently
       # holds an absolute path to one checkout on this machine, so it is not

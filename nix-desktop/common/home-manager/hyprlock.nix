@@ -46,7 +46,9 @@ in
         inner_color = "rgba(0, 0, 0, 0.5)";
         font_color = "rgb(200, 200, 200)";
         fade_on_empty = true;
-        placeholder_text = "<i>Password...</i>";
+        # hyprgraphics renders label text with pango_layout_set_text, not
+        # set_markup, so tags here are drawn literally rather than parsed.
+        placeholder_text = "Password...";
         hide_input = false;
         position = "0, -120";
         halign = "center";
@@ -58,7 +60,12 @@ in
           monitor = "";
           text = "$TIME";
           font_size = 120;
-          font_family = "JetBrains Mono Nerd Font Bold";
+          # A pango font description: family, then style. The family is
+          # "JetBrainsMono" with no space -- spelled with one, fontconfig finds
+          # no match and silently falls back to DejaVu Sans Mono. The greeter
+          # in ../nixos/sddm-hyprlock/Main.qml states the same pair as
+          # font.family + font.bold.
+          font_family = "JetBrainsMono Nerd Font Bold";
           position = "0, 80";
           halign = "center";
           valign = "center";

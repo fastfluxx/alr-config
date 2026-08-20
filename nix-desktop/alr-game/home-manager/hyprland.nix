@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ ... }:
 
 {
 
@@ -23,8 +23,11 @@
     dpmsTimeout = 500;
   };
 
-  # No battery on a desktop; otherwise the shared default.
-  local.waybar.modulesRight = [ "pulseaudio" "bluetooth" "network" "cpu" "memory" "tray" ];
+  # No battery on a desktop, and no bluetooth adapter in this machine -- the
+  # module would poll a bluez that the host does not run, and its click would
+  # reach for a blueman-mechanism that is not there. The other two hosts keep
+  # both.
+  local.waybar.modulesRight = [ "pulseaudio" "network" "cpu" "memory" "tray" ];
 
   local.hyprland = {
     enable = true;
@@ -44,10 +47,5 @@
     # together once the real connector name is known.
     workspaceMonitors = { };
   };
-
-  # Packages needed for this specific desktop
-  home.packages = with pkgs; [
-    blueman # Bluetooth manager (used by waybar bluetooth module)
-  ];
 
 }
