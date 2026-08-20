@@ -13,37 +13,63 @@ alr-game's NVIDIA driver is pinned by hand for a Pascal card
 ## Pending on the machines
 
 None of this is a code change -- it is work the repo cannot do for itself.
-State recorded 2026-08-19.
+State recorded 2026-08-20, verified on alr-work; the lines about the other two
+hosts are carried over and not re-checked.
 
-- [ ] **Switch all three hosts.** alr-work runs `kv2rz210...` while `main`
-  evaluates to `sp8ys10k...`, so nothing since the ssh migration is live
-  anywhere: the shared base modules, the git identity, mako, and the ESP
-  change are all committed and unapplied. `nixos-rebuild switch --flake .`
+- [ ] **Switch all three hosts.** *Verified* on alr-work: generation 104 runs
+  `kv2rz2108kw3g6sd0xd7bg8angfx4n34`, while `main` evaluates to
+  `b3yyix2zjsl4r3hsm26ivygj1j8kcpmy`. Nothing has been switched anywhere since
+  the ssh migration, so everything committed since then is inert: the shared
+  base modules, the git identity, mako, the ESP change, hyprlock on alr-home,
+  the unifi removal, and the whole of the 2026-08-20 review work.
+  `nixos-rebuild switch --flake .`
 
-- [ ] **Push `main`.** Four commits ahead of `origin/main`: the ssh migration,
-  the four small home-manager fixes, mako, and the ESP change.
+- [ ] **Push `main`.** `origin/main` sits at `dc60049`. Unpushed: the five bug
+  fixes, the nm-applet/brightnessctl move, adb on alr-home, and the edits to
+  this file. No count here on purpose -- it was wrong last time, because the
+  ssh migration, the home-manager fixes, mako and the ESP change were pushed
+  after the number was written down. `git log origin/main..main` is the answer.
 
-- [ ] **Remount `/boot` on alr-work.** *Verified*: it is still mounted
+- [ ] **Remount `/boot` on alr-work.** *Re-verified 2026-08-20*: still mounted
   `fmask=0022,dmask=0022`. Switching does not remount an already-mounted
   filesystem, so this needs `mount -o remount /boot` or a reboot before the
   0077 in the config is real.
 
-- [ ] **Remove `~/.gitconfig` on each host,** after switching. `programs.git`
-  now writes `~/.config/git/config`, but the hand-written `~/.gitconfig` still
-  exists here and takes precedence, so the declarative identity stays inert
-  until it is gone. *Verified* with two scratch configs: with both files
-  present git returns the `~/.gitconfig` value; with only the XDG one it
-  returns that.
+- [ ] **Remove `~/.gitconfig` on each host,** after switching. *Re-verified on
+  alr-work 2026-08-20*: the hand-written file is still there (117 bytes, dated
+  2025-11-10) and `git config --get user.email` still answers from it;
+  `~/.config/git/config` does not exist yet, which is expected before a switch.
+  The declarative identity stays inert until the old file is gone.
+
+- [ ] **Test hyprlock on alr-home before letting it lock by itself.** That
+  switch turns the lock screen on for the first time, and hypridle will lock
+  the session after 300s idle. If `security.pam.services.hyprlock` is not
+  working on that host, a correct password will be refused on a session that
+  is already running -- recoverable only by switching VT and killing hyprlock.
+  Run `hyprlock` by hand from a terminal straight after switching and confirm
+  it unlocks, before walking away.
 
 - [ ] **Decide what happens to `/var/lib/unifi` on alr-game.** `services.unifi`
   was removed from the config, so switching stops the daemon and leaves the
   controller's state directory behind. Nothing deletes it -- keep it if the
   controller may come back elsewhere, otherwise remove it by hand.
 
-- [ ] **Press `SUPER + SHIFT + S`.** The region grab is the one path in the
-  screenshot tool never exercised by a human -- it needs a real pointer drag.
-  Window and output modes were run and produced correct captures. With mako
-  now installed, a "Screenshot saved" notification should appear too.
+- [ ] **Look at what the 2026-08-20 fixes changed,** once each host is
+  switched. None of it can be checked from the repo:
+
+  - `SUPER + SHIFT + S`. The region grab is still the one path in the
+    screenshot tool never exercised by a human -- it needs a real pointer drag.
+    Window and output modes were run and produced correct captures. With mako
+    installed, a "Screenshot saved" notification should appear too.
+  - The hyprlock clock should now render in JetBrainsMono bold rather than
+    DejaVu Sans Mono, and match the SDDM greeter's clock.
+  - The hyprlock password field should read `Password...` with no visible
+    `<i>` tags around it.
+  - `SUPER + 0` should focus workspace 10 -- on both laptops that is the
+    internal panel.
+  - `adb devices` should work on alr-home. A phone shows as `unauthorized`
+    until the "Allow USB debugging?" prompt is accepted on the handset; that
+    is the phone's own key confirmation, not a permissions problem.
 
 ## Documentation and dead code
 
