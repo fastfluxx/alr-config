@@ -16,30 +16,30 @@ None of this is a code change -- it is work the repo cannot do for itself.
 State recorded 2026-08-20, verified on alr-work; the lines about the other two
 hosts are carried over and not re-checked.
 
-- [ ] **Switch all three hosts.** *Verified* on alr-work: generation 104 runs
-  `kv2rz2108kw3g6sd0xd7bg8angfx4n34`, while `main` evaluates to
-  `b3yyix2zjsl4r3hsm26ivygj1j8kcpmy`. Nothing has been switched anywhere since
-  the ssh migration, so everything committed since then is inert: the shared
-  base modules, the git identity, mako, the ESP change, hyprlock on alr-home,
-  the unifi removal, and the whole of the 2026-08-20 review work.
-  `nixos-rebuild switch --flake .`
+- [ ] **Switch alr-home and alr-game.** alr-work is done -- generation 105
+  runs `b3yyix2zjsl4r3hsm26ivygj1j8kcpmy`, which is what `main` evaluated to at
+  the time, and `hyprctl binds` confirms the compositor reloaded rather than
+  keeping the old config in memory. The other two hosts have had nothing since
+  the ssh migration. `nixos-rebuild switch --flake .`
 
 - [ ] **Push `main`.** `origin/main` sits at `dc60049`. Unpushed: the five bug
-  fixes, the nm-applet/brightnessctl move, adb on alr-home, and the edits to
-  this file. No count here on purpose -- it was wrong last time, because the
-  ssh migration, the home-manager fixes, mako and the ESP change were pushed
-  after the number was written down. `git log origin/main..main` is the answer.
+  fixes, the nm-applet/brightnessctl move, adb on alr-home, the screenshot
+  freeze fix, and the edits to this file. No count here on purpose -- it was
+  wrong last time, because the ssh migration, the home-manager fixes, mako and
+  the ESP change were pushed after the number was written down.
+  `git log origin/main..main` is the answer.
 
-- [ ] **Remount `/boot` on alr-work.** *Re-verified 2026-08-20*: still mounted
-  `fmask=0022,dmask=0022`. Switching does not remount an already-mounted
-  filesystem, so this needs `mount -o remount /boot` or a reboot before the
-  0077 in the config is real.
+- [ ] **Remount `/boot` on alr-work.** *Re-verified after the switch to
+  generation 105*: still mounted `fmask=0022,dmask=0022`, exactly as the
+  earlier note predicted -- switching does not remount an already-mounted
+  filesystem. Needs `mount -o remount /boot` or a reboot.
 
-- [ ] **Remove `~/.gitconfig` on each host,** after switching. *Re-verified on
-  alr-work 2026-08-20*: the hand-written file is still there (117 bytes, dated
-  2025-11-10) and `git config --get user.email` still answers from it;
-  `~/.config/git/config` does not exist yet, which is expected before a switch.
-  The declarative identity stays inert until the old file is gone.
+- [ ] **Remove `~/.gitconfig` on each host.** *Re-verified on alr-work after
+  the switch*: `~/.config/git/config` now exists, but `git config
+  --show-origin --get user.email` still answers `file:/home/alr/.gitconfig`,
+  and the same for `core.excludesFile`. The two files happen to hold identical
+  values, so nothing looks wrong -- which is why this can sit indefinitely
+  with the declarative identity inert.
 
 - [ ] **Test hyprlock on alr-home before letting it lock by itself.** That
   switch turns the lock screen on for the first time, and hypridle will lock
@@ -54,22 +54,25 @@ hosts are carried over and not re-checked.
   controller's state directory behind. Nothing deletes it -- keep it if the
   controller may come back elsewhere, otherwise remove it by hand.
 
-- [ ] **Look at what the 2026-08-20 fixes changed,** once each host is
-  switched. None of it can be checked from the repo:
+- [ ] **Re-test `SUPER + SHIFT + S` after the next switch.** The region grab
+  was tried on 2026-08-20 and captured nothing; the cause is fixed in the
+  tree but not yet on any machine. It is still the one path never confirmed
+  working by a human -- window and output modes have been.
 
-  - `SUPER + SHIFT + S`. The region grab is still the one path in the
-    screenshot tool never exercised by a human -- it needs a real pointer drag.
-    Window and output modes were run and produced correct captures. With mako
-    installed, a "Screenshot saved" notification should appear too.
-  - The hyprlock clock should now render in JetBrainsMono bold rather than
-    DejaVu Sans Mono, and match the SDDM greeter's clock.
+- [ ] **Still to look at on alr-work,** now that it is switched. Verified from
+  the config rather than by eye, so each still wants a glance:
+
+  - The hyprlock clock should render in JetBrainsMono bold, matching the SDDM
+    greeter. *The live `hyprlock.conf` has `font_family=JetBrainsMono Nerd
+    Font Bold`*, so only the appearance is unconfirmed.
   - The hyprlock password field should read `Password...` with no visible
-    `<i>` tags around it.
-  - `SUPER + 0` should focus workspace 10 -- on both laptops that is the
-    internal panel.
-  - `adb devices` should work on alr-home. A phone shows as `unauthorized`
-    until the "Allow USB debugging?" prompt is accepted on the handset; that
-    is the phone's own key confirmation, not a permissions problem.
+    `<i>` tags.
+  - `SUPER + 0` should focus workspace 10. *Present in the running
+    compositor's bind table*, not just in the generated file.
+
+- [ ] **On alr-home, once switched:** `adb devices` should work. A phone shows
+  as `unauthorized` until the "Allow USB debugging?" prompt is accepted on the
+  handset; that is the phone's own key confirmation, not a permissions problem.
 
 ## Documentation and dead code
 

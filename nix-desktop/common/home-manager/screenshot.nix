@@ -22,10 +22,23 @@ let
   # whose `monitors` / `activewindow` answers match the running instance.
   hyprlandPackage = config.wayland.windowManager.hyprland.package;
 
-  # hyprpicker paints a still copy of the screen over the live one, so hover
-  # states and animations cannot shift under the selection box while it is
-  # being drawn. grim then captures the frozen overlay, which is the same
-  # pixels the selection was made against.
+  # Off by default, because on this stack it does not work: hyprpicker 0.4.7
+  # is a colour picker first, and `--render-inactive` only freezes the
+  # *inactive* displays -- on the active one it stays interactive and takes
+  # the pointer. slurp's layer then never sees the drag and it gives up at
+  # once. Reproduced 3/3 on alr-work against Hyprland 0.56:
+  #
+  #   hyprpicker --render-inactive --no-zoom --quiet &
+  #   sleep 0.2; slurp -d          # -> "selection cancelled", exit 1
+  #   slurp -d                     # without the freeze: waits for the drag
+  #
+  # Worse, slurp reports it as "selection cancelled", exit 1 -- byte for byte
+  # what it says when the user presses Escape. The caller below cannot tell
+  # the two apart and must not try: it correctly treats a cancel as a normal
+  # way to back out, which is why this failed silently, with no file and no
+  # notification, and looked exactly like a deliberate abort.
+  # Left as an option rather than deleted: a hyprpicker that composes with
+  # slurp would make this worth having again.
   freeze = lib.optionalString cfg.freeze ''
     if [ "$mode" = region ]; then
       hyprpicker --render-inactive --no-zoom --quiet &
@@ -120,10 +133,12 @@ in
 
     freeze = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
-        Freeze the screen while a region is being selected. Costs an extra
-        package (hyprpicker) and about 200ms before the selection box appears.
+        Freeze the screen while a region is being selected, so hover states and
+        animations cannot shift under the selection box. Off by default: with
+        hyprpicker 0.4.7 the freeze swallows the pointer and the region grab
+        silently captures nothing -- see the comment above the implementation.
       '';
     };
   };
