@@ -36,6 +36,7 @@
     sshfs
     nerd-fonts.jetbrains-mono
     font-awesome
+    poppler-utils
     # Programming
     python3
     # To enable copy-paste
