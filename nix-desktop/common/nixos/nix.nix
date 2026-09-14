@@ -12,7 +12,7 @@
 
 {
   nix.settings = {
-    experimental-features = "nix-command flakes";
+    experimental-features = [ "nix-command" "flakes" ];
 
     # The flake tracks hyprwm/Hyprland from git rather than a nixpkgs release,
     # so without the project's own cache each `nix flake update` compiles the
