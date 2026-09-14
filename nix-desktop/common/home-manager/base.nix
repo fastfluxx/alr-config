@@ -29,6 +29,7 @@
     file
     tldr
     zip
+    unzip
     p7zip
     bat
     dig
