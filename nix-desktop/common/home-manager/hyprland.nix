@@ -1,6 +1,6 @@
 # Shared Hyprland desktop. Hosts supply only what actually differs: monitors,
 # workspace placement, and any extra binds.
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.local.hyprland;
@@ -146,7 +146,8 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      # Package comes from programs.hyprland in common/nixos/desktop.nix; the
+      # portal is wired up there too, so home-manager must not add a second one.
       portalPackage = null;
 
       # Hyprland 0.56 dropped hyprlang; hyprland.conf is no longer read at all.

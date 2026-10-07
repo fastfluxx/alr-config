@@ -1,16 +1,17 @@
 # The graphical stack: Hyprland, its display manager, audio, and the bits they
 # both need. Imported alongside base.nix by every host, since all three are
 # desktops -- kept separate so a headless host could take base.nix alone.
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
-  programs.hyprland = {
-    enable = true;
-    # The flake input rather than nixpkgs: 0.56 is what the Lua configs in
-    # common/home-manager/ target, and nixpkgs lags it.
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-  };
+  # nixpkgs' Hyprland, deliberately, rather than the upstream flake. The flake
+  # pins its own nixpkgs, so its Mesa drifts from the system's: once the two
+  # mesa-libgbm builds stopped matching, gbm_create_device() failed, aquamarine
+  # came up with no allocator and Hyprland aborted in initServer -- which looks
+  # exactly like a rejected login, since SDDM just redraws the greeter. nixpkgs
+  # tracks 0.56.x (what the Lua configs in common/home-manager/ target) and is
+  # built against the same Mesa as hardware.graphics, so the two cannot diverge.
+  programs.hyprland.enable = true;
 
   # Hosts add their own extraPackages (Intel VA-API) or enable32Bit (Steam).
   hardware.graphics.enable = true;

@@ -62,9 +62,14 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelParams = [
-    "video=DP-7:e"
-  ];
+  # Deliberately no "video=DP-7:e" here. DP-7 is a DP-MST connector that only
+  # exists once a dock enumerates, so forcing it buys nothing: undocked there is
+  # no connector to force, and docked it detects on its own with a real EDID --
+  # DP-5 hangs off the same MST hub, is never forced, and comes up fine. What the
+  # force did do was let the DRM poll worker read EDID over an MST i2c adapter
+  # that was still being set up while hot-plugging the Thunderbolt 3 dock, which
+  # NULL-dereferenced in i2c_transfer and froze the machine. The greeter picks its
+  # head from connector status instead; see common/nixos/sddm-greeter.nix.
 
   # Nix-ld to make the linker work for self compile binaries
   programs.nix-ld = {
@@ -98,7 +103,7 @@
   # Enable virtualization (KVM/QEMU and Docker)
   virtualisation.libvirtd.enable = true;
   virtualisation.docker.enable = true;
-  users.users.alr.extraGroups = [ "libvirtd" "kvm" "docker" ];
+  users.users.alr.extraGroups = [ "libvirtd" "kvm" "docker" "dialout"];
 
   environment.systemPackages = with pkgs; [
     networkmanagerapplet  # Wi-Fi tray icon and nm-connection-editor
