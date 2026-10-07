@@ -32,6 +32,13 @@ in
     ];
   };
 
+  programs.ssh.settings."laud-build-server 10.0.30.251" = {
+    HostName = "10.0.30.251";
+    User = "laud";
+    IdentityFile = "~/.ssh/id_laud_build_server";
+    IdentitiesOnly = true;
+  };
+
   home.sessionVariables = {
     DOTNET_ROOT = "${dotnet}/share/dotnet";
   };
@@ -61,7 +68,6 @@ in
     pkgs.android-tools
     # AI Code
     pkgs.claude-code
-    pkgs.aider-chat
   ];
 
   # The switches below want ancient kex/cipher algorithms and are kept here
