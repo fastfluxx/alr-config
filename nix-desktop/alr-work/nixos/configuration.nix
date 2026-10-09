@@ -22,6 +22,10 @@
     libvdpau-va-gl
   ];
 
+  services.udev.extraRules = ''
+  SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", GROUP="dialout", MODE="0664"
+  '';
+
   environment.sessionVariables = {
     # Force Intel drivers for hardware acceleration
     LIBVA_DRIVER_NAME = "iHD";
