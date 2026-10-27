@@ -64,6 +64,8 @@ in
     pkgs.dotnet-ef
     pkgs.jetbrains.jdk
     dotnet
+    # DB
+    pkgs.dbeaver-bin
     # Android
     pkgs.android-tools
     # AI Code
