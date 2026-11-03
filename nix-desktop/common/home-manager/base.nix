@@ -37,6 +37,7 @@
     sshfs
     nerd-fonts.jetbrains-mono
     font-awesome
+    ncdu
     poppler-utils
     # Programming
     python3
