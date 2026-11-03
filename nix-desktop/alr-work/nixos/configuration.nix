@@ -51,8 +51,8 @@
   security.pam.services.hyprlock = {};
 
   boot.initrd = {
-    systemd.enable = true;          # Switches NixOS to modern systemd stage-1 boot
-    luks.fido2Support = false;      # Must be false! Systemd handles this natively now
+    #systemd.enable = true;          # Switches NixOS to modern systemd stage-1 boot
+    #luks.fido2Support = false;      # Must be false! Systemd handles this natively now
 
     luks.devices = {
       "crypted" = {
